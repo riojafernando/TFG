@@ -19,7 +19,7 @@ import os
 def buscar (filename, path):
     
 #Le pasamos el nombre de un archivo y nos devuelve la cabecera    
-    
+#Comenta un poco más el código!!!!
     print("Hasta aqui llego")
     
     if str(path) == 'here' or str(path) == 'aqui':
