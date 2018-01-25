@@ -25,7 +25,8 @@ def buscar (filename, path):
     if str(path) == 'here' or str(path) == 'aqui': #Si ponemos aqui/here coge
     #el directorio actual
         path = os.getcwd()
-    
+    path = os.getcwd()+'/'+path
+    os.chdir(path)
     contenido_dir = os.listdir(path)
     header = filename + '.hea'
     for i in contenido_dir:
@@ -76,5 +77,7 @@ def buscar (filename, path):
     a = min(senal['val'][2])
     print(a)
 
+fname = 'v813l'
+path = 'dataset'
          
-buscar(raw_input(), raw_input())        
+buscar(fname, path)        
