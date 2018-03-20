@@ -25,20 +25,32 @@ accep = True
 if accep == True:
     for j in range(3):
         for n in range(12):
+            plt.plot((patient[j])[n+1]+n*400,color = 'k') #he probado a
+            #modificar estas constantes pero no pinto nada
             plt.plot((patient[j])[n+1]+n*40,color = 'k')
         
 else:
     for j in range(3):
         for n in range(12):
+            plt.plot((patient[j])[n+1]+n*200,color = 'k') 
             plt.plot((patient[j])[n+1]+n*20,color = 'k') 
 
 
 plt.ylim((-10,2500))
 
 
+#Hasta aqui mas o menos bien
 from sklearn.decomposition import PCA, KernelPCA
 
 #we need to remove leads which are linear combination of the remaining
+#esto de encima lo entiendo, pero no porque haciendo lo de abajo lo conseguimos
+for j in range(3):
+    patient_12 = patient[j][:]
+    
+print np.shape(patient_12)
+patient_8leads = np.concatenate((patient_12[:,0:2],patient_12[:,6:]),axis = 1)
+print np.shape(patient_8leads)
+=======
 ecg_12 = ecg[:,1:]
 print np.shape(ecg_12)
 ecg_8leads = np.concatenate((ecg_12[:,0:2],ecg_12[:,6:]),axis = 1)
@@ -48,6 +60,7 @@ print np.shape(ecg_8leads)
 #X_kpca = kpca.fit_transform(ecg[:,1:])
 #X_back = kpca.inverse_transform(X_kpca)
 pca = PCA()
+X_pca = pca.fit_transform(patient_8leads)
 X_pca = pca.fit_transform(ecg_8leads)
 
 
@@ -61,6 +74,7 @@ if accep == False:
     
     plt.subplot(121)
     for n in range(8):
+        plt.plot(patient_8leads[:,n]+n*200,color = 'k') 
         plt.plot(ecg_8leads[:,n]+n*200,color = 'k') 
         plt.ylim((-150,1500))
         plt.axis('off')
@@ -73,6 +87,7 @@ if accep == False:
 else:
     plt.subplot(121)
     for n in range(8):
+        plt.plot(patient_8leads[:,n]+n*350,color = 'k') 
         plt.plot(ecg_8leads[:,n]+n*350,color = 'k') 
         plt.ylim((-150,2700))
         plt.axis('off')
