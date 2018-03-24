@@ -9,6 +9,24 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io as sp
 
+#function to plot subplots
+def plot_sub(x,t):
+    """
+    function to plot, in subplots, a matrix x with n signals (rows)
+    """
+    
+    n = len(x.T)
+
+    ax1 = plt.subplot(n,1,1)
+    plt.plot(t,x[:,0],'k')
+    plt.xlabel('Time [sec]')
+    plt.ylabel('a.u.')   
+    for i in range(2,n+1):
+        plt.subplot(n,1,i,sharex = ax1)
+        plt.plot(t,x[:,i-1],'k')
+        plt.xlabel('Time [sec]')
+        plt.ylabel('a.u.') 
+
 #%%
 #------------------------------------------------------------
 #working PCA example using data from challenge
@@ -24,81 +42,48 @@ x = signals['val'].T
 #remove mean for each signals. We do not need it
 #x_no_mean = x - np.mean(x,axis = 0, keepdims = True)
 fs = 250. #sampling frequency in Hz
-t = np.arange(0,len(x_no_mean[:,0]))/fs
+t = np.arange(0,len(x[:,0]))/fs
 #let's plot.
-n = len(x.T)
-
-for i in range(1,n+1):
-    plt.subplot(n,1,i,sharex  = True, sharey = True)
-    plt.plot(t,x[:,i-1],'k')
-    plt.xlabel('Time [sec]')
-    plt.ylabel('a.u.')    
+plot_sub(x,t) 
+    
+#NOTE: we attached x axis to make the same zoom in every subplot
 #%%
 
 #Hasta aqui mas o menos bien
 from sklearn.decomposition import PCA, KernelPCA
 
-#we need to remove leads which are linear combination of the remaining
-#esto de encima lo entiendo, pero no porque haciendo lo de abajo lo conseguimos
-for j in range(3):
-    patient_12 = patient[j][:]
-    
-print np.shape(patient_12)
-patient_8leads = np.concatenate((patient_12[:,0:2],patient_12[:,6:]),axis = 1)
-print np.shape(patient_8leads)
-#=======
-ecg_12 = ecg[:,1:]
-print np.shape(ecg_12)
-ecg_8leads = np.concatenate((ecg_12[:,0:2],ecg_12[:,6:]),axis = 1)
-print np.shape(ecg_8leads)
+#What I removed is only particular for 12 lead ECGs. We do not need it here.
 
-#kpca = KernelPCA(kernel = 'rbf', fit_inverse_transform =True, gamma = 10)
-#X_kpca = kpca.fit_transform(ecg[:,1:])
-#X_back = kpca.inverse_transform(X_kpca)
+#standardize
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+x_std = scaler.fit_transform(x)
+
 pca = PCA()
-X_pca = pca.fit_transform(patient_8leads)
-X_pca = pca.fit_transform(ecg_8leads)
+X_pca = pca.fit_transform(x_std)
+#X_pca = pca.fit_transform(ecg_8leads)
 
+
+#Caution it may take too long
+kpca = KernelPCA(kernel = 'cosine',degree = 2,n_components=6,remove_zero_eig=True, gamma = 10,n_jobs = -1)
+#X_kpca = kpca.fit_transform(x_std[:15000,:])
+X_kpca = kpca.fit_transform(x_std[:3000,:])
+
+#X_back = kpca.inverse_transform(X_kpca)
+
+eigenvalues_pca = pca.explained_variance_
+lambdas_kpca = kpca.lambdas_
 
 print(X_pca.shape)
+print(X_kpca.shape)
 
-plt.figure(figsize = (15,5))
-
-#make different plots wheter is acc or unacc
-
-if accep == False:
-    
-    plt.subplot(121)
-    for n in range(8):
-        plt.plot(patient_8leads[:,n]+n*200,color = 'k') 
-        plt.plot(ecg_8leads[:,n]+n*200,color = 'k') 
-        plt.ylim((-150,1500))
-        plt.axis('off')
-    plt.subplot(122)
-    for m in range(8):
-        plt.plot(X_pca[:,7-m]+m*450,color = 'k')
-    plt.ylim((-30,3500))
-    plt.axis('off')
-    
-else:
-    plt.subplot(121)
-    for n in range(8):
-        plt.plot(patient_8leads[:,n]+n*350,color = 'k') 
-        plt.plot(ecg_8leads[:,n]+n*350,color = 'k') 
-        plt.ylim((-150,2700))
-        plt.axis('off')
-    plt.subplot(122)
-    for m in range(8):
-        plt.plot(X_pca[:,7-m]+m*690,color = 'k')
-    plt.ylim((-30,5500))
-    plt.axis('off')
-    
-#Plot the eigenvalues
+#plot eigenvectors
+#%%
 plt.figure()
-plt.plot(pca.explained_variance_/np.sum(pca.explained_variance_),linewidth = 2,marker = 'o')
-plt.axis('tight')
-plt.xlabel('n_components')
-plt.ylabel('Explained_variance')
+plot_sub(X_pca,t)
+plt.title('Projections onto Egeinvectors')
 
-pca.explained_variance_
-        
+plt.figure()
+plot_sub(X_kpca[:,:5],t[:3000])
+#plt.title('Projections onto Egeinvectors - Kernel PCA')
