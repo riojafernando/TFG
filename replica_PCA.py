@@ -9,35 +9,31 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io as sp
 
-#ejemplo PCA
+#%%
+#------------------------------------------------------------
+#working PCA example using data from challenge
+#------------------------------------------------------------
+
+plt.close('all')
+#Load signal
 signals = sp.loadmat(str("a103l.mat"))
-patient = {}
-for i in range(3):
-    patient[i] = signals['val'][i]
 
-#ecg = np.loadtxt("./files/1568146.txt",delimiter = ',') #unacceptable
-#ecg = np.loadtxt("./files/1101829.txt",delimiter = ',') #unacceptable
-for i in range(3):
-    patient[i] = patient[i] - np.mean(patient[i],axis = 0)
+#let's define x as the matrix with rows == time  and cols== signals
+x = signals['val'].T
 
-accep = True
+#remove mean for each signals. We do not need it
+#x_no_mean = x - np.mean(x,axis = 0, keepdims = True)
+fs = 250. #sampling frequency in Hz
+t = np.arange(0,len(x_no_mean[:,0]))/fs
+#let's plot.
+n = len(x.T)
 
-if accep == True:
-    for j in range(3):
-        for n in range(12):
-            plt.plot((patient[j])[n+1]+n*400,color = 'k') #he probado a
-            #modificar estas constantes pero no pinto nada
-            plt.plot((patient[j])[n+1]+n*40,color = 'k')
-        
-else:
-    for j in range(3):
-        for n in range(12):
-            plt.plot((patient[j])[n+1]+n*200,color = 'k') 
-            plt.plot((patient[j])[n+1]+n*20,color = 'k') 
-
-
-plt.ylim((-10,2500))
-
+for i in range(1,n+1):
+    plt.subplot(n,1,i,sharex  = True, sharey = True)
+    plt.plot(t,x[:,i-1],'k')
+    plt.xlabel('Time [sec]')
+    plt.ylabel('a.u.')    
+#%%
 
 #Hasta aqui mas o menos bien
 from sklearn.decomposition import PCA, KernelPCA
@@ -50,7 +46,7 @@ for j in range(3):
 print np.shape(patient_12)
 patient_8leads = np.concatenate((patient_12[:,0:2],patient_12[:,6:]),axis = 1)
 print np.shape(patient_8leads)
-=======
+#=======
 ecg_12 = ecg[:,1:]
 print np.shape(ecg_12)
 ecg_8leads = np.concatenate((ecg_12[:,0:2],ecg_12[:,6:]),axis = 1)
