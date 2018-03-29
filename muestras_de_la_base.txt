@@ -1,0 +1,22 @@
+('Total de pacientes:', 750)
+('Total de pacientes con 3:', 252)
+('Total de pacientes con 4:', 498)
+========================================
+('Total de pacientes cuya primera es I:', 13)
+('Total de pacientes cuya primera es II:', 724)
+('Total de pacientes cuya primera es III:', 12)
+('Total de pacientes cuya primera es aVF:', 1)
+========================================
+('Total de pacientes cuya segunda es V:', 684)
+('Total de pacientes cuya segunda es aVF:', 2)
+('Total de pacientes cuya segunda es II:', 4)
+('Total de pacientes cuya segunda es III:', 27)
+('Total de pacientes cuya segunda es MCL:', 28)
+('Total de pacientes cuya segunda es aVR:', 3)
+('Total de pacientes cuya segunda es aVL:', 2)
+========================================
+('Total de pacientes cuya tercera es ABP:', 123)
+('Total de pacientes cuya tercera es PLETH:', 627)
+========================================
+('Total de pacientes con cuarta que es ABP:', 220)
+('Total de pacientes con cuarta que es PLETH:', 278)
