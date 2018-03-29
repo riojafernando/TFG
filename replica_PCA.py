@@ -49,7 +49,8 @@ def extract_header():
     count_resp4 = 0;
     count2_MCL = 0;
     
-    path = "/home/fernando/Escritorio/TFG/dataset/" #BE CAREFUL
+    #path = "/home/fernando/Escritorio/TFG/dataset/" #BE CAREFUL
+    path = "./dataset/" #BE CAREFUL
     files = os.listdir(path)
     for header in files:
         if 'hea' in str(header):
@@ -161,27 +162,29 @@ from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler() 
 x_std = scaler.fit_transform(x)
 #windowed signals
-x_windowed = {}
+x_windowed = []
 
 for i in range(5):
-    x_windowed[i] = x_std[i*16500:16500*(i+1)]
+    x_windowed.append(x_std[i*16500:16500*(i+1)])
 
 #Make PCA for each section
 pca = PCA()
-X_pca_w = {}
-X_kpca_w = {}
-eigenvalues_pca = {}
-lambdas_kpca = {}
-kpca = KernelPCA(kernel = 'cosine',degree = 2,n_components=10,remove_zero_eig=True, gamma = 10,n_jobs = -1)
+X_pca_w = []
+X_kpca_w = []
+eigenvalues_pca = []
+lambdas_kpca = []
+kpca = KernelPCA(kernel = 'cosine',degree = 2,n_components=6,remove_zero_eig=True, gamma = 10,n_jobs = -1)
+i = 0
 #X_kpca = kpca.fit_transform(x_std[:15000,:])
-for i in range(5):
+for x_win in x_windowed:
     
-    X_pca_w[i] = pca.fit_transform(x_windowed[i])
-    eigenvalues_pca[i] = pca.explained_variance_
-    X_kpca_w[i] = kpca.fit_transform(x_windowed[i][0:2000])
+    X_pca_w.append(pca.fit_transform(x_win))
+    eigenvalues_pca.append(pca.explained_variance_)
+    X_kpca_w.append(kpca.fit_transform(x_win))
     #Con todas las señales muere
-    lambdas_kpca[i] = kpca.lambdas_
-    print i
+    lambdas_kpca.append(kpca.lambdas_)
+    print i,' de ',len(x_windowed)
+    i +=1
 #X_pca = pca.fit_transform(ecg_8leads)
 
 #X_kpca_w[1] = kpca.fit_transform(x_windowed[1][0:2000])
@@ -189,17 +192,15 @@ for i in range(5):
 print ("termino KPCA")
 
 #Caution it may take too long
-<<<<<<< HEAD
-kpca = KernelPCA(kernel = 'sigmoid',degree = 2,n_components=10,remove_zero_eig=True, gamma = .3,n_jobs = -1)
+#<<<<<<< HEAD
+#kpca = KernelPCA(kernel = 'sigmoid',degree = 2,n_components=10,remove_zero_eig=True, gamma = .3,n_jobs = -1)
 #X_kpca = kpca.fit_transform(x_std[:15000,:])
-X_kpca = kpca.fit_transform(x_std[:3000,:])
+#X_kpca = kpca.fit_transform(x_std[:3000,:])
 
 #X_back = kpca.inverse_transform(X_kpca)
 
-eigenvalues_pca = pca.explained_variance_
-lambdas_kpca = kpca.lambdas_
-=======
->>>>>>> a9d25140f802527f1de121f4e60fc372f20e36af
+#eigenvalues_pca = pca.explained_variance_
+#lambdas_kpca = kpca.lambdas_
 
 
 #X_back = kpca.inverse_transform(X_kpca)
@@ -213,5 +214,5 @@ plt.figure()
 plt.title('Projections onto Egeinvectors')
 
 plt.figure()
-#plot_sub(X_kpca[:,:5],t[:3000])
+plot_sub(X_kpca_w[0][:,:5],t[:2000])
 #plt.title('Projections onto Egeinvectors - Kernel PCA')
