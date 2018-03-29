@@ -66,7 +66,7 @@ X_pca = pca.fit_transform(x_std)
 
 
 #Caution it may take too long
-kpca = KernelPCA(kernel = 'cosine',degree = 2,n_components=6,remove_zero_eig=True, gamma = 10,n_jobs = -1)
+kpca = KernelPCA(kernel = 'sigmoid',degree = 2,n_components=10,remove_zero_eig=True, gamma = .3,n_jobs = -1)
 #X_kpca = kpca.fit_transform(x_std[:15000,:])
 X_kpca = kpca.fit_transform(x_std[:3000,:])
 

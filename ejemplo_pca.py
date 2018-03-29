@@ -37,7 +37,7 @@ print np.shape(ecg_8leads)
 #X_kpca = kpca.fit_transform(ecg[:,1:])
 #X_back = kpca.inverse_transform(X_kpca)
 pca = PCA()
-X_pca = pca.fit_transform(ecg_8leads)
+X_pca = pca.fit(ecg_8leads)
 
 
 print(X_pca.shape)
