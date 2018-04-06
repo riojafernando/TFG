@@ -30,5 +30,5 @@ random_state=seed)
 
 
 model = XGBClassifier()
-model.fit(X_train, y_train, param0)
+model.fit(X_train, y_train)
 print(model)
