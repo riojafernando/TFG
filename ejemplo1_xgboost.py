@@ -28,7 +28,16 @@ random_state=seed)
 #train our XgboostModel
 # fit model on training data
 
-
 model = XGBClassifier()
 model.fit(X_train, y_train)
 print(model)
+
+#make predictions for the test data
+#we round the output probability to 0 or 1 because is a binary classification 
+y_pred = model.predict(X_test)
+predictions = [round(value) for value in y_pred]
+
+#we can evaluate the performance of the predictions by comparing them to the expected values.
+#For this we will use the built in accuracy score() function in scikit-learn.
+accuracy = accuracy_score(y_test, predictions)
+print("Accuracy: %.2f%%" % (accuracy * 100.0))
