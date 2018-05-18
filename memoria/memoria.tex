@@ -1,0 +1,52 @@
+\documentclass[a4paper,12pt,twoside]{report}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage
+[       
+left=2.5cm,
+right=2.5cm
+]
+{geometry}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+\usepackage{enumitem} 
+\usepackage{url}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage[normalem]{ulem}
+\usepackage{subcaption}
+\usepackage{mwe}
+\usepackage{afterpage}
+\useunder{\uline}{\ul}{}
+\graphicspath{ {images/} }
+\usepackage{fancyhdr}
+%Options: Sonny, Lenny, Glenn, Conny, Rejne, Bjarne, Bjornstrup
+\usepackage[Bjornstrup]{fncychap}
+\setlength{\parindent}{1cm}
+\titlespacing*{\section}{0pt}{5.5ex plus 1ex minus .2ex}{4.3ex plus .2ex}
+
+\begin{document}
+\include{portada}
+\clearpage
+\tableofcontents % indice de contenidos
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Lista de figuras} % para que aparezca en el indice de contenidos
+\listoffigures % indice de figuras
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Lista de tablas} % para que aparezca en el indice de contenidos
+
+\cleardoublepage
+\include{Introduccion}
+\include{EstadoDelArte}
+\include{descripciondatos}
+\clearpage
+\include{bibliografia}
+\end{document}
