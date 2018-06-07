@@ -19,7 +19,7 @@ files = os.listdir(path)
 x_4 = {}
 x_4_short = {}
 x_long_windowed = [0,0,0,0,0]
-x_short_windowed = [0,0,0,0,0]
+x_short_windowed = [0] * 4940
 
 #function to plot subplots
 def plot_sub(x,t):
@@ -70,7 +70,7 @@ def find_signals():
             signal1 = linea1[-1]
             signal2 = linea2[-1]
             signal3 = linea3[-1]
-            if '4' in linea0[1] and '82500' in linea0[-1]: #look for patients with 4 signals
+            if '4' in linea0[1] and '82500' in linea0[-1] and 'b' in linea0[0]: #look for patients with 4 signals
                 linea4 = lineas[4].split();
                 signal4 = linea4[-1]
                 count4 += 1
@@ -90,7 +90,6 @@ def find_signals():
                 signal4 = linea4[-1]
                 count4 += 1
                 mat_name = path + header[0:5] + '.mat'
-                print mat_name
                 archivo_mat = sp.loadmat(str(mat_name))
                 x_4_short[j] = archivo_mat['val'].T
                 if signal4 == "ABP":#type of signal
@@ -131,36 +130,36 @@ def find_signals():
 
 
 #%%
-def windower(signals,output,size):
-    """
-    window a signal
-    """    
-    
-    for i in range(5):
-        for j in range(5):
-            output[j] = signals[j][i*size:size*(i+1)]
-            
-        
-
-        
-#%%
 
 find_signals()
 #pass dict into a list
-x_long_input = x_4.values()
 x_short_input = x_4_short.values()
-#make 5 windows  
-windower(x_long_input,x_long_windowed,16500)
-windower(x_short_input,x_short_windowed,15000)
+#make 5 windows
+size = 15000
+i = 0
+j = 0
+z = 0
+for k in range(4940):
+    print k
+    x_short_windowed[k] = x_short_input[j][:,z][i*size:size*(i+1)]
+    i += 1;
+    if i == 5:
+        i = 0
+        z += 1
+    if z == 4:
+        i = 0
+        j += 1
+        z = 0
+        
+x_windowed_pepino = np.array(x_short_windowed).reshape(15000,4940)
 #normalize the values
 scaler = StandardScaler() 
-for i in range (5):
-    x_long_std = scaler.fit_transform(x_long_windowed[i])
-    x_short_std = scaler.fit_transform(x_short_windowed[i])
-    
+x_short_std = scaler.fit_transform(x_windowed_pepino)
 #doing PCA
 pca = PCA()
-x_long_pca = pca.fit_transform(x_long_std)
-eigenvalues_long = pca.explained_variance_
 x_short_pca = pca.fit_transform(x_short_std)
 eigenvalues_short = pca.explained_variance_
+##start with xgboost
+
+
+
