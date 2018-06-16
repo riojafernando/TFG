@@ -11,16 +11,22 @@ import matplotlib.pyplot as plt
 import scipy.io as sp
 import os
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-
+#from xgboost import XGBClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import StratifiedKFold
+from matplotlib import pyplot
+from tempfile import TemporaryFile
 
 path = "/home/fernando/Escritorio/TFG/dataset/"
 files = os.listdir(path)
 x_4 = {}
 x_4_short = {}
 x_long_windowed = [0,0,0,0,0]
-x_short_windowed = [0] * 4940
-
+x_short_windowed = [0] * 9420
+Y_data = [];
+Data = TemporaryFile()
 #function to plot subplots
 def plot_sub(x,t):
     """
@@ -67,6 +73,7 @@ def find_signals():
             linea1 = lineas[1].split();
             linea2 = lineas[2].split();
             linea3 = lineas[3].split();
+            linea6 = lineas[-1].split();
             signal1 = linea1[-1]
             signal2 = linea2[-1]
             signal3 = linea3[-1]
@@ -85,9 +92,14 @@ def find_signals():
                     
                 i += 1; 
                  
-            elif '4' in linea0[1] and '75000' in linea0[-1]:
+            elif '4' in linea0[1]:
                 linea4 = lineas[4].split();
                 signal4 = linea4[-1]
+                if '#True' in linea6[0]:#create a lsit with the outputs
+                    Y_data.append(1) #1 means TP
+                elif '#False' in linea6[0]:
+                    Y_data.append(0)#0 means FP
+                
                 count4 += 1
                 mat_name = path + header[0:5] + '.mat'
                 archivo_mat = sp.loadmat(str(mat_name))
@@ -134,32 +146,32 @@ def find_signals():
 find_signals()
 #pass dict into a list
 x_short_input = x_4_short.values()
-#make 5 windows
+num_pat = 471 # patients number with 4 signals
+
+num_wind_per_patient = 5
 size = 15000
-i = 0
-j = 0
-z = 0
-for k in range(4940):
-    print k
-    x_short_windowed[k] = x_short_input[j][:,z][i*size:size*(i+1)]
-    i += 1;
-    if i == 5:
-        i = 0
-        z += 1
-    if z == 4:
-        i = 0
-        j += 1
-        z = 0
-        
-x_windowed_pepino = np.array(x_short_windowed).reshape(15000,4940)
-#normalize the values
-scaler = StandardScaler() 
-x_short_std = scaler.fit_transform(x_windowed_pepino)
-#doing PCA
+signals_per_patient = 4
+num_lambda_per_patient = signals_per_patient*num_wind_per_patient
+X_data = np.zeros((num_pat,num_lambda_per_patient))
+segments = np.zeros((size,5));
 pca = PCA()
-x_short_pca = pca.fit_transform(x_short_std)
-eigenvalues_short = pca.explained_variance_
-##start with xgboost
+for l in range(num_pat):
+    patient = x_short_input[l]
+    #go through the windows
+    for seg in range(num_wind_per_patient):
+       
+        segments = patient[seg*size:size*(seg+1),:]# patient frame with 4 windows 15000*4
+        #making PCA, outuput are 4 eigenvalues per window
+        segment_pca = pca.fit_transform(segments)
+        lambda_aux = pca.explained_variance_ratio_   
+        X_data[l,seg*4:4*(seg+1)] = lambda_aux
+
+#remove a nan row
+X_data = np.delete(X_data, (376), axis=0)
+Y_data = np.delete(Y_data, (376), axis=0)
+#save data
+np.save('Data.npy', X_data)
+np.save('Output.npy', Y_data);
 
 
 
