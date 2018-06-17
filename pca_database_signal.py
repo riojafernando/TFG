@@ -19,7 +19,8 @@ from sklearn.model_selection import StratifiedKFold
 from matplotlib import pyplot
 from tempfile import TemporaryFile
 
-path = "/home/fernando/Escritorio/TFG/dataset/"
+#path = "/home/fernando/Escritorio/TFG/dataset/"
+path = "./dataset/"
 files = os.listdir(path)
 x_4 = {}
 x_4_short = {}
@@ -67,7 +68,7 @@ def find_signals():
     
     for header in files:
         if 'hea' in str(header):
-            archivo = open(path + header, 'rwx')
+            archivo = open(path + header, 'r')
             lineas = archivo.readlines()
             linea0 = lineas[0].split();
             linea1 = lineas[1].split();
@@ -82,7 +83,7 @@ def find_signals():
                 signal4 = linea4[-1]
                 count4 += 1
                 mat_name = path + header[0:5] + '.mat'
-                print mat_name
+                print(mat_name)
                 archivo_mat = sp.loadmat(str(mat_name))
                 x_4[i] = archivo_mat['val'].T
                 if signal4 == "ABP":#type of signal
@@ -145,7 +146,7 @@ def find_signals():
 
 find_signals()
 #pass dict into a list
-x_short_input = x_4_short.values()
+x_short_input = list(x_4_short.values()) #to accomodate python3
 num_pat = 471 # patients number with 4 signals
 
 num_wind_per_patient = 5
