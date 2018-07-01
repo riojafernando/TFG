@@ -9,7 +9,7 @@ Created on Sat Jun 16 18:19:49 2018
 from xgboost import XGBClassifier
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import StratifiedKFold
 from matplotlib import pyplot
@@ -50,7 +50,7 @@ pickle.dump(grid_result, open("xgboost_CV.pickle.dat", "wb"))
 print("Saved model to: pima.pickle.dat")
 # some time later...
 # load model from file
-loaded_model = pickle.load(open("xgboost_CV.pickle.dat", "rb"))
+grid_result = pickle.load(open("xgboost_CV.pickle.dat", "rb"))
 
 #Con el mejor resultado, crear un modelo xgboost que tenga los hiperparametros del mejor resultado
 #luego probar los resultados en test y comparar contra naive bayes y regresion logistica
@@ -77,3 +77,4 @@ y_pred_prob = best_model.predict_proba(X_test)
 #esto te lo explico en persona la semana que viene mejor.
 
 #todo el resumen de la matriz de confusión y demás.
+print(confusion_matrix(y_test,y_pred))
