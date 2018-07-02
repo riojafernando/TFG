@@ -1,0 +1,379 @@
+\chapter {Métodos}
+
+En este capítulo se van a exponer las diferentes técnicas de \textit{machine learning} que se van a aplicar al problema, como son los árboles de clasificación, \textit{naive Bayes} y regresión logística. Así mismo se introducirán conceptos más generales como \textit{statistical learning} y \textit{machine learning} y sus principales diferencias.\par 
+
+\section{Statistical Learning}
+
+No resulta sencillo encontrar una definición para statistical learning, se puede definir como el área de las matemáticas que pretende obtener determinadas conclusiones a partir de datos conocidos\cite{ISL}. El esquema general seria el siguiente:
+\begin{equation}\label{eq:estimation}
+	Y = f(X) + e 
+\end{equation}
+
+Se puede ver cómo el \textit{statistical learning} corresponde a encontrar una ecuación o función que explique la relación entre los datos. \textit{f} es una función de \textit{X1, X2,… Xn}, es decir, de los datos de entrada y el término \textit{e} se corresponde con el error. De forma muy sencilla podríamos decir que el objetivo del statistical learning es estimar \textit{f}. \par 
+
+Existen dos motivos principales por los que puede resultar de interés estimar \textit{f}: predicción o inferencia.\cite{ISL}
+\begin{enumerate}
+\item \textbf{Predicción}: en muchos casos el conjunto de datos es conocido y está bien definido, pero obtener la salida que ofrecen esos datos no suele ser una tarea sencilla.
+\item \textbf{Inferencia}: probablemente se conozca la salida \textit{Y}, y las características de entrada \textit{X}, pero no se encuentra una forma de relacionarlos. Su objetivo es obtener conclusiones útiles para hacer deducciones sobre una totalidad, basándose en la información numérica de la muestra, es decir, ver cómo están relacionadas cada una de las variables de entrada \textit{X} con la salida \textit{Y}.\cite{inferencia_wiki}. Normalmente, este tipo de problemas responde a una de las siguientes preguntas:
+\begin{enumerate}
+\item ¿Qué variables están asociados con la respuesta?
+\item ¿Cuál es la relación entre la salida y cada variable?
+\item ¿Se puede resumir la relación entre \textit{Y} con cada variable de entrada con una relación lineal o es más complicada?
+\end{enumerate}
+\end{enumerate}
+
+\section{Machine Learning}
+
+Asociado al concepto anterior, surgen diversas técnicas para llevarlo a cabo, este TFG se centra en el \textit{machine learning} el cual podemos definir como: un campo de la inteligencia artificial y las ciencias de la computación, que puede aprender de los datos, en vez de reglas de programación clásicas.\cite{analitics} \par 
+
+Para relacionar ambos términos, se puede concluir que el \textit{machine learning} es capaz de encontrar relaciones entre los datos, aplicando técnicas de \textit{statistical learning}. \par 
+
+\subsection{Motivación del Machine Learning}
+
+Las aplicaciones que existían en la programación clásica, funcionan en base a estructuras de control, los ya conocidos \textit{if, else, switch, case...} Pero de esto se haya principalmente un incoveniente, para resolver un problema de este tipo se tiene que estudiar a fondo la aplicación es decir, deberíamos programar infinitas situaciones para, por ejemplo, reconocer una cara en una aplicación móvil o identificar que alimentos se tienen delante en el plato. Detrás de este problema surge otro, la necesidad de que un humano esté muy encima del desarrollo del algoritmo, para por ejemplo, ver que decisiones se tomarían si fuese un humano el que decidiera.\cite{ISL_python}
+
+A la hora de abordar un problema de \textit{machine learning} es necesario saber que se trata de un problema complejo, normalmente con muchas observaciones y que el mayor tiempo en un proyecto de estas características se lo lleva el análisis de los datos y elegir un modelo que optimice la solución. Existen varios tipos de problemas dentro del \textit{machine learning} y no todos responden igual ante todos los datos. Suele ser de utilidad plantearse algunas preguntas básicas al principio del proyecto para ayudar a la hora de elegir qué técnica concreta utilizar.\cite{ISL_python}
+\begin{itemize}
+\item ¿Qué objetivo se quiere conseguir? ¿Es posible con los datos disponibles?
+\item ¿De cuántos datos se pueden analizar/extraer conclusiones? 
+\item ¿Faltan más ejemplos? ¿Qué hacer con los datos erróneos o incompletos?
+\end{itemize}
+
+Cómo se observa, son preguntas sencillas, pero de mucha utilidad a la hora de enfocar un problema de \textit{machine learning}. \par
+La primera hace referencia al objetivo o \textit{goal} del proyecto. La segunda a tener acotados los datos de los que se dispone el estudio y confirmar que todos son válidos para el propósito y la última, se corresponde con el necesario preprocesamiento de los datos, no siempre están en un formato adecuado, totalmente completos, en la forma que interesa para el algoritmo, etc.\par 
+
+Dentro del \textit{machine learning} se pueden diferenciar dos tipos de algoritmos o problemas bastante diferenciados: \textit{supervised learning} y \textit{unsupervised learning}
+
+\subsection{Supervised Learning}
+El \textit{machine learning} se divide en dos áreas principales: aprendizaje supervisado y aprendizaje no supervisado. Aunque pueda parecer que el primero se refiere a la intervención humana y la segunda no, estos dos conceptos tienen más que ver con qué se quiere hacer con los datos.\cite{cleverdata} \par 
+
+Estos problemas son los más usuales y los que suelen tener mejor éxito en cuanto a su \textit{accuracy}. Consiste en aportar al algoritmo datos de entrada de los que conocemos su salida, una vez disponemos de ambos conjuntos de datos (entrada y salida) se procede a entrenar el algoritmo.\cite{ISL} Una vez hecho el entrenamiento (\textit{training}), se procede a evaluarlo en la fase de prueba (\textit{test}) dónde se espera que el algoritmo genere determinadas salidas para ciertas entradas dadas.\cite{ISL_python}\par 
+
+Realmente, no es el usuario el que elige qué problema quiere resolver, este viene definido por las características que tengan sus variables de entrada. Existen variables categóricas o cualitativas que diferencian entre distintas clases de una variable, por ejemplo si la variable de entrada es una fruta, podremos asignarla a la clase manzana, pera, plátano... \par 
+
+Por otra parte, existen variables cuantitativas registran valores numéricos, el precio de una acción, la temperatura...\cite{ISL}
+En función del tipo que sea la variable de salida del problema se tienen dos grandes grupos de problemas en el aprendizaje supervisado: clasificación vs regresión.\par 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=12cm]{class-regress}
+	\caption{Ejemplos de clasificación y regresión.}
+	\label{fig:class_regress}
+\end{figure}
+
+
+\begin{itemize}
+\item \textbf{Regresión}: problemas donde la naturaleza de la variable de salida es cuantitativa. 
+\item \textbf{Clasificación}: algoritmos qué su respuesta es una variable cualitativa o clase.
+\end{itemize}
+
+\vspace{1cm}
+
+\subsection{Unsupervised Learning}
+
+Es el otro gran tipo de problemas en \textit{machine learning}. En el \textit{unsupervised learning} sólo se conocen los datos de entrada.\cite{ISL} Suelen ser problemas más complejos, ya que no se pueden contrastar contra una salida conocida. El fin es explorar los datos para encontrar alguna estructura o forma de organizarlos. \cite{cleverdata} No se sabe si existe algo que predecir, se trata de entender comportamientos, agrupaciones, tendencias... \par 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{cluster}
+	\caption{Algoritmo de \textit{clustering} dónde se aprecian 5 \textit{clusters}}
+	\label{fig:cluster}
+\end{figure}
+
+Una de las técnicas más extendidas en el \textit{unsupervised learning} es el conocido como \textit{clustering} o agrupamiento. En pocas palabras, el objetivo es segregar grupos con rasgos similares, es decir, "agrupar" vectores con características similares y separar los que sean diferentes.\cite{clustering}
+
+Ahora se van a explicar tres conceptos claves en los algoritmos de \textit{machine learning} como son: generalización, sobreajuste o \textit{overfitting}, subajuste o \textit{underfitting}.
+
+\vspace{4cm}
+
+\subsection{Entrenamiento y generalización}
+
+Como ya se ha mencionado, en \textit{machine learning} se entrena un determinado algoritmo para después ser evaluado con otro conjunto de datos nuevos al que llamamos \textit{test}.\par 
+
+Para cualquier aplicación que se desee diseñar con estas técnicas, es importante el concepto de \textbf{generalización}. Es necesario que el algoritmo que se haya diseñado obtenga buenas respuestas (clasifique bien, falle pocas veces, estime correctamente ciertas muestras críticas, etc), con ejemplos nuevos.\par 
+
+Existen dos problemas que surgen asociados al hecho de tener que entrenar cada algoritmo: \textit{overfitting} y \textit{underfitting}.
+\begin{itemize}
+	\item \textbf{Overfitting}: Es un problema muy habitual en los comienzos con el \textit{machine learning}. Lo que ocurrirá es que la máquina sólo se ajustará a aprender los casos particulares que le enseñen y será incapaz de reconocer nuevos datos de entrada. En nuestro conjunto de datos de entrada muchas veces introducimos muestras atípicas (ó anómalas) o con “ruido/distorsión” en alguna de sus dimensiones, o muestras que pueden no ser del todo representativas. Cuando “sobre-entrenamos” nuestro modelo y caemos en el \textit{overfitting}, el algoritmo estará considerando como válidos sólo los datos idénticos a los del conjunto de entrenamiento.\cite{overfitting}
+	\item \textbf{Underfitting}: Se dice que un modelo estadístico o un algoritmo sufre \textit{underfitting} cuando no es capaz de capturar la forma o las relaciones subyacentes de los datos.\cite{underfitting} Un indicador claro de \textit{underfitting} es obtener malos resultados en entrenamiento, lo que parece indicar que en el \textit{test} se obtendrán malos resultados también.
+\end{itemize}
+
+Para solucionar este problema se deben tener en cuenta ciertas consideraciones:\cite{overfitting} tener una cantidad mínima de muestras tanto para entrenar como para probar, disponer de clases variadas, tener uno o varios conjuntos de test, para ello podemos utilizar técnicas de validación cruzada si no se disponen de muchas muestras.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{overfitting}
+	\caption{\textit{Overfitting} VS \textit{Underfitting}}
+	\label{fig:Overfitting}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{training}
+	\caption{Proporciones de los conjuntos de entrenamiento y \textit{test} en función del número total de muestras.}
+	\label{fig:training}
+\end{figure}
+
+\vspace{1cm}
+
+\section{Enventanado de las señales}
+
+Procesar señales de 5 minutos de duración puede ser tedioso y computacionalmente muy exigente. Por esta razón, se procede a enventanar las señales.\par 
+
+Enventanar una señal no es más que divirla en tramos para poder procesarla más fácilmente. La expresión para enventanar una señal es la siguiente:
+\begin{equation}
+	w(t) = x(t) · h(t)
+\end{equation}
+
+Existen diferentes tipos de ventanas atendiendo a su forma en tiempo y frecuencia.\footnote{\url{https://en.wikipedia.org/wiki/Window_function}}. También dos principales métodos de aplicar estas ventanas, con solapamiento o sin solapamiento:
+\begin{itemize}
+\item \textbf{Con solapamiento:} Esta técnica se utiliza para evitar pérdida de información en los bordes de las ventanas. No obstante, las ventanas resultantes quedan más grandes.
+\item \textbf{Sin solapamiento:} Se pierde un poco de resolución en los bordes, con el beneficio de acortar el tamaño de las ventanas.
+\end{itemize} 
+En este TFG se va a utilizar un enventanado rectangular y sin solapamiento, donde la función de la ventana quedaría de la siguiente forma:
+\begin{equation}
+h(t)= \left\{ \begin{array}{lcc}
+             1 &   si  & t \in  [0,T] \\
+             0 &   resto. 
+             \end{array}
+   \right.
+\end{equation}
+
+\section{Análisis exploratorio de datos: PCA}
+
+Una vez se tienen unos conceptos básicos sobre \textit{machine learning}, es conveniente recordar el esquema principal de un proyecto de esta índole.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{esquema}
+	\caption{Fases necesarias en un proyecto de \textit{machine learning.}}
+	\label{fig:esquema}
+\end{figure}
+
+La técnica que se aplica en este TFG, se puede englobar en el apartado "Limpieza de los datos". Existen diferentes formas de plasmar estas etapas, pero en todas ellas en análisis exploratorio de los datos, es previo an entrenamiento del modelo. \par 
+
+En este punto, se detalla la técnica PCA (\textit{principal component analysis}), que es la que se va a utilizar.\par 
+
+\begin{itemize}
+	\item \textbf{Problema}: ¿Se puede agrupar la información de un conjunto de datos mediante un número de variables menor que el de variables originales?
+	\item \textbf{Idea}: Si una variable es función de otras, aporta información redundante.
+\end{itemize}
+
+Por tanto, si las \textit{m} variables observadas están fuertemente correlacionadas, sería posible sustituirlas por menos variables sin gran pérdida de información.\cite{carlosiii}\par 
+
+PCA combina linealmente las componentes del vector de entrada \textit{X} para obtener otro conjunto de características \textit{f}, denominadas componentes principales. Las nuevas componentes se generan de forma que están incorrelacionadas entre sí.\cite{PCA}
+Las componentes \textit{f} están ordenadas en función de la varianza (de las componentes originales) explicada, luego, descartar las últimas compnentes de \textit{f} implica descartar las componentes con menos información.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{PCA1}
+	\caption{Componentes principales relacionadas con la matriz de datos.}
+	\label{fig:matriz}
+\end{figure}
+
+El objetivo ahora debe ser como calcular los elementos de la matriz central. Cómo el objetivo es maximizar la varianza, se impone que el módulo del vector a sea 1:\cite{PCA}
+\begin{equation}\label{eq:vector_a}
+	a_{j} = \sum_{m=1}^{p}a_{kj}^2= 1
+\end{equation}
+
+Se elige $a_{1}$ con el objetivo de maximizar la varianza de $f_1$ sujeta a la restricción de que el módulo sea 1:
+\begin{equation}
+	Var(f_1) = Var(a_1^T * x) = a_1^T * \sum a_1
+\end{equation}
+
+Ahora el problema es maximizar dicha función. Cabe destacar que la incógnita es precisamente $a_1$ (el vector desconocido que ofrece la combinación lineal óptima). De este modo de constriye la función L:\cite{PCA}
+\begin{equation}
+	L(a_1) = a_1^T * \sum a_1 - \lambda(a_1^T * a_1 - 1)
+\end{equation}
+Para maximizar la función hay que derivar despecto de $a_1$ (el valor que se quiere maximizar) e igualar a 0:
+\begin{equation}
+\dfrac{\delta L}{\delta a_1} = 2 \sum a_1 - 2\lambda l a_1 = 0
+\end{equation}
+
+El resultado, es en realidad un sistema lineal de ecuaciones. Por el teorema de Rouché-Frobenius\footnote{\url{https://bit.ly/2JvVo4a}}, para una solución distinta de 0 de la matriz $(\sum - \lambda l)$ tiene que ser singular. Esto implica que el determinante tiene que ser igual a 0:\cite{PCA}
+\begin{equation}
+	|\sum - \lambda l| = 0 
+\end{equation}
+
+La matriz de covarianzas obtenida es de orden \textit{p} y además está definida como positiva tal que $\lambda_1 > \lambda_2 ...> \lambda_p$ . Se puede llegar entonces a relacionar la varianza de $f_1$ de la siguiente forma:
+\begin{equation}
+	Var(f_1) = Var(a_1^Tx) = a_1^T \sum a_1 = a_1^T \lambda a_1 = \lambda a_1^T a_1 = \lambda 1 = \lambda
+\end{equation}
+
+Luego para maximizar la varianza de $f_1$ se tiene que coger el mayor autovalor, es decir $\lambda_1$ y su correspondiente autovector $a_1$. \cite{PCA} \par
+\vspace{0.5cm}
+Se pueden resumir dos características fundamentales de PCA:
+\begin{enumerate}
+\item La varianza es maximizada. Se quiere ver qué variables o características del modelo explican más varianza que otras, es decir, cuáles aportan más información.
+\item El error de reconstrucción final es mínimo (el error que medimos de volver de las características transformadas a las originales).
+\end{enumerate}
+
+Desde un punto de vista geométrico, y posiblemente más intuitivo, el aplicar PCA, es equivalente a efectuar una rotación de los ejes.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=10cm]{PCA_rot}
+	\caption{Rotación de los ejes originales \textit{X}, en los transformados \textit{f}}
+	\label{fig:rotacion}
+\end{figure}
+\par 
+Resulta muy común encontrar esta técnica aplicada en diferentes escenarios, como por ejemplo, extracción de características en sistemas de regresión o de clasificación como es el caso de este TFG. Son situaciones donde existen muchas muestras de entrada que no aportan demasiada información, en este proyecto, por ejemplo, se disponen de 3-4 señales por paciente.\par 
+Para acotar el problema, se han seleccionado sólo aquellos pacientes de los que se tienen registradas 4 señales, 498, en 247 casos sólo se dispone de la señal hasta que se produjo la alarma, es decir, 5 minutos de señal o 75000 muestras por cada señal, y en otros 251 casos se tiene la señal 30 segundos después de que saltáse la alarma, lo que haría un total de 5:30 minutos y 82500 muestras.\par 
+Para establecer una aproximación, sólo con el primer grupo de pacientes (de los que se tienen 5 minutos) ya se pueden obtener unos 74 millones de muestras de los cuales no todos son relevantes, es por esto que se decidió proceder a reducir los datos utilizando esta técnica.
+
+Suele ser común quedarse con un determinado número de \textit{eigenvalues} (autovalores) según diferentes criterios. Quedarse con los X primeros, que son los que más varianza explican, quedarse con los que expliquen un porcentaje importante, por ejemplo valores habituales son un 70-80\%. \par 
+
+Realmente en este TFG, se está utilizando una técnica muy muy similar a PCA, como es la reducción al espacio señal-ruido. Aplicando PCA, lo que se quiere (además de reducir los datos de entrada como se mencionó previamente) es ver que parte de las señales son realmente señal y cuales ruido. Los autovalores muy altos indicarán que en ese tramo de señal existe mucha información útil para la clasificación, miesntras que por el contrario, autovalores bajos indicarán que tenemos poca información o ruido.\par 
+
+No obstante, en este TFG, uan vez aplicada esta técnica, no se disponen de unas cantidades de datos desmedidas, con lo que no se van a descartar autovalores. La matriz de datos X queda de la siguiente forma: \par 
+
+Una matriz de 471x20, donde las 471 filas son los pacientes de los que disponemos 4 señales registradas y 20 columnas que corresponden a los autovalores asociados a cada paciente. Cuatro señales por paciente y cinco ventanas por señal.
+
+\section{Árboles de clasificación: XGBoost}
+
+\subsection{Introducción y conceptos}
+En esta sección se van a explicar los conceptos generales de los árboles de clasificación así como del módulo de Python que se ha utilizado para implementarlo en este TFG.\par 
+
+Los árboles de clasisicación son una técnica muy extendida de \textit{machine learning} dónde la salida puede tomar un conjunto finito de valores. Esta técnica se basa en utilizar árboles de decisión: dado un conjunto de datos, se fabrican diagramas de construcciones lógicas, que sirven para representar y categorizar una serie de condiciones que ocurren de forma sucesiva, para la resolución de un problema.\cite{decision_trees}\par 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{decision}
+	\caption{Esquema de un árbol de decisión.}
+	\label{fig:decision_tree}
+\end{figure}
+
+Los árboles de clasificación son, en esencia, encadenar varias series de árboles de decisión para resolverun modelo más complejo, que tiene como salida un resultado finito. Las principales ventajas de utilizar esta herramienta son:\cite{ventajas_trees}
+\begin{itemize}
+\item Plantean el problema para que todas las opciones sean contempladas.
+\item Proveen un esquema para cuantificar el coste de un resultado y la probabilidad de que suceda.
+\item Llevan lleva a adoptar la mejor alternativa con la información existente
+\end{itemize}
+Y estos inconvenientes:
+\begin{itemize}
+\item Las reglas de asignación son bastante sencillas a pequeñas perturbaciones en los datos.
+\item Al no tener claridad de objetivos, es difícil de organizar las ideas.
+\item Presenta inconvenientes cuando la cantidad de alternativas es grande y cuanto las decisiones no son racionales.
+\end{itemize}
+
+En este TFG, se hizo PCA realmente para separar que partes del espacio de señales son información útil, y que partes son ruido. Con esta herramienta se evitan las pequeñas modificaciones en los datos. Por otro lado, el objetivo es claro, decidir si la alarma es positiva o no (clasificación binaria o decisión).
+
+\subsection{XGBoost: Introducción}
+
+XGboost es una librería de código abierto, que permite hacer algoritmos basados en \textit{Gradient boosting} en diferentes sistemas operativos (Windows, Linux, macOS) y en direfentes lenguajes de programación (Python, Java, C++).\cite{wiki_xgboost}
+
+\textit{Gradient boosting} es una de las técnicas más potentes para construir modelos predictivos. La idea principal consiste en desarrollar un algoritmo que consiga convertir las hipótesis débiles en buenas. \cite{XGBoost}\par 
+El boosting es un algoritmo de aprendizaje automático supervisado que reduce el sesgo y la varianza. Responde a la pregunta que hicieron Kearns y Valiant: ¿Puede un conjunto de clasificadores débiles, formar un clasificador robusto? \par 
+En resumen, utilizar a las hipótesis débiles o alumnos débiles \textit{(weak learners)} en repetidas ocasiones generando una sucesión de hipótesis, cada una centrada en los ejemplos que anteriormente se hubiesen encontrado dificultades o no estén clasificados aún. ¿Cómo es esto posible? 
+
+La primera implementación con éxito de boosting fue Adaptative Boosting, AdaBoost de aquí en adelante. Los weak learners en AdaBoost son árboles de decisión de un solo escalón. ¿Cómo funciona?\par 
+
+El funcionamiento es el siguiente:\cite{XGBoost}
+AdaBoost configura un peso a las observaciones, poniendo más énfasis a las que son difíciles de clasificar y menos con las que ya se maneja bien. Los nuevos alumnos son añadidos secuencialmente al modelo y su función es el entrenamiento de los patrones más complicados. Esto significa que las muestras más difíciles de clasificar tienen una cadena más larga de árboles, de pesos, que finalmente hace que clasifiquemos mejor estas muestras. De esta forma conseguimos invertir más carga computacional en observaciones más difícil de clasificar y menos en las que el algoritmo responde correctamente.
+Las votaciones se hacen por mayoría de los weak learners ponderados por su precisión individual. Los resultados más satisfactorios de AdaBoost fueron para problemas de clasificación binaria, que posteriormente se llamó AdaBoost M1.\par 
+
+Estos resultados son en los que se ha apoyado este TFG para la elección de esta implementación del \textit{Gradient Boosting}.\par 
+
+Esta clase de algoritmos se describió como un modelo aditivo por etapas. Esto se debe a que se agrega un nuevo alumno débil a la vez y los estudiantes débiles existentes en el modelo se congelan y se dejan sin cambios.\par 
+ 
+La idea de gradiente queda patente, ya que el gradiente es un operador matemático que indica la variación máxima de una magnitud. En el algoritmo, los cambios siempre son introducidos al final, cuando añadimos un nuevo weak learner, es decir, un escalón más al árbol.
+
+\subsection{XGBoost: Conceptos claves}
+En esta técnica se pueden diferenciar 3 conceptos clave:\cite{XGBoost}
+\begin{enumerate}
+\item \textbf{Loss function:} Una función de pérdida que debe ser optimizada.
+\item \textbf{Weak Learners:} Alumnos o hipótesis malos/as para hacer predicciones.
+\item \textbf{Aditive model:} para añadir alumnos débiles que, paso a paso, vayan minimizando la función de pérdida.
+\end{enumerate}
+
+\subsubsection{Loss Function}
+
+La función de pérdida depende del problema que se esté abordando. Tiene que ser derivable, pero en definitiva se admiten muchos modelos, por ejemplo, la regresión puede utilizar el error cuadrado y la clasificación puede utilizar una función logarítmica.\par 
+Un punto positivo de trabajar con Gradient Boosting, es que no es necesario desarrollar otro algoritmo para cada función de pérdida que se quiera utilizar, ofrece un marco lo suficientemente amplio como para que se pueda utilizar cualquier función de pérdida derivable.
+
+\subsubsection{Weak Learners}	
+
+Como ya se ha mencionado, en cada etapa(es un modelo aditivo) del modelo se añade un nuvo alumno débil. Concretamente se utilizan árboles de regresión que generan salidas reales que se puedan sumar. Esto permite que se puedan añadir salidas de elementos previos y corregir los residuos dejados por predicciones anteriores. Los árboles se construyen aprovechando los mejores puntos de división, donde sea posible minimizar las pérdidas.
+Inicialmente, como en el caso de AdaBoost se utilizaron árboles muy cortos y de un sólo nivel. Después es habitual que se utilicen árboles con 4-8 niveles así como que se limite a los alumnos débiles, para garantizar  que sigan siendo débiles, se puede conseguir limitando el número de nodos o de niveles.\cite{XGBoost}
+
+\subsubsection{Aditive Model}
+
+Los árboles son añadidos uno cada vez y hay árboles (o partes del árbol) que no cambian en el modelo. La disminución del gradiente se utiliza para minimizar un conjunto de parámetros como, por ejemplo, variables en una regresión o pesos en una red neuronal. Después de calcular el error, loo pesos son actualizados para minimizarlo.\cite{XGBoost}\par 
+
+En este caso, en lugar de varibles de una regresión o pesos en una red neuronal, se tienen árboles de decisión. Después de calcular el error, debemos añadir otro árbol que siga minimizando el error, para seguir con el gradiente. Este enfoque se denomina descenso funcional del gradiente o descenso del gradiente con funciones.
+
+\subsection{XGboost y el problema del Overfitting}
+
+Los algoritmos de \textit{machine learning} se enfrentan a diversos problemas en su construcción, pero uno de los más destacados es el \textit{overfitting}.\par 
+
+\textit{Gradient Boosting} es un algoritmo potente, que a su vez puede sufrir \textit{overfitting} fácilmente. En este apartado se resumen 4 mejoras para aumentar la efectividad  y reducir el sobreentrenamiento del gradiente:
+
+\begin{enumerate}
+\item \textbf{Tree constraints:} Una de las máximas más intuitivas y la primera restricción que se puede añadir al modelo es utilizar  el mínimo número de árboles necesario para llevarlo a cabo. También se pueden apuntar algunas restricciones más a la hora de añadir árboles de decisión:
+\begin{enumerate}
+\item El número de árboles puede hacer el entrenamiento muy costoso, tanto temporal como computacionalmente, luego el consejo es añadir árboles siempre y cuando se vea una mejora notable del algoritmo.
+\item La frondosidad del bosque. Los árboles sencillos son más eficaces y eficientes. Con 4-8 niveles es cuando se ven mejores resultados.
+\item Número de nodos o de hojas: como la profundidad. Se trata de acotar la dimensión del árbol. No obstante, dependerá mucho del estudio que vayamos a realizar.
+
+\end{enumerate}
+\item \textbf{Weighted Updates:} Las predicciones de cada árbol se suman juntas secuencialmente. La contribución de cada árbol a esta suma se puede ponderar para aclerar/ralentizar el aprendizaje mediante el algoritmo. Esta ponderación se denomina contracción (shrinkage) o tasa de aprendizaje. Simplemente se pondera cada actualización por la tasa de aprendizaje. \par 
+El efecto que produce es una ralentización del aprendizaje, requiriendo más árboles para el modelo, lo que conlleva más tiempo de entrenamiento generando una relación entre el número de árboles y la tasa de aprendizaje. Disminuir el valor de v (tasa de aprendizaje) aumenta el valor de M (la cantidad de árboles). Es común tener valores pequeños en torno a 0.1-0.3 así como valores más pequeños que 0.1.
+La contracción ayuda a reducir la influencia de cada árbol individual y ayuda que árboles futuros mejoren el modelo.
+
+\item \textbf{Stochastic Gradient Boosting:} Resulta beneficioso que los árboles se creen a partir de muestras del training set. Esta técnica se puede utilizar también para reducir la correlación entre los árboles.\par 
+
+En cada iteración, una muestra de los datos de entrenamiento se extrae al azar (sin reemplazo) del conjunto de datos de entrenamiento completo. La muestra seleccionada al azar se usa luego, en lugar de la muestra completa, para el alumno débil.
+
+\end{enumerate}
+
+\subsection{XGBoost: Resumen y justificación}
+
+En resumen, se utiliza \textit{XGBoost} ya que sus dos características principales son también los objetivos de un modelo de machine learning y, por supuesto, del de este TFG: rápida ejecución y rendimiento del modelo. Resulta sencillo encontrar numerosas competiciones de Kaggle\footnote{\url{https://www.kaggle.com/}} donde los ganadores (e incluso los que hacen podio) utilizan soluciones con esta librería.\par 
+
+Se pueden obtener muy buenos resultados teniendo en cuenta los consejos para sobreponerse al \textit{overfitting} . Se trata de una biblioteca muy versátil, ya que está disponible para varios lenguajes de programación y sistemas operativos. También ofrece la posibilidad de ser usada en terminales de comandos.
+
+
+\section{Naive Bayes}
+	El primer método a estudiar va a ser el clasificador de Bayes ingenuo (\textit{naive Bayes}). Este clasificador, dado un ejemplo de entrada \textit{x} se basa en encontrar la hipótesis más probable a la que corresponda el ejemplo.\cite{naive} El ejemplo puede venir dado por un conjunto de valores como $<a_1, a_2...a_n>$, entonces la hipótesis más probable será aquella que cumpla:
+	\begin{equation}
+		\hat{S}_{MAP} = arg\hspace{0.2cm}max_{\hat{S}}\hspace{0.2cm}P(S_j|a_1,a_2...a_n)
+	\end{equation}
+	Es decir, la probabilidad de ya conocidos los valores que describen ese ejemplo, éste pertenezca a la clase $\hat{S}$. \par 
+	\vspace{0.5cm}
+	Aplicando el Teorema de Bayes quedaría la siguiente expresón:
+	\begin{equation}
+		\hat{S}_{MAP} =  arg\hspace{0.2cm}max_{\hat{S}}\dfrac{P(a_1,a_2...a_n|\hat{S})p(\hat{S})}{P(a_1, a_2...a_n)}
+	\end{equation}
+	Para calcular $P(\hat{S})$ se pueden contar las veces que aparece en el conjunto de entrenamiento y despúes dividirlo entre el número de ejemplos totales. Sin embargo, para conocer el término $P(a_1,a_2...a_n)$, es decir, las veces que aparece el ejemplo \textit{x} en cada categoría, se debería recorrer todo el conjunto de entrenamiento, posiblemente más de una ocasión. Esta práctica no resultaría fácilmente computable en el momento en el que la dimensión de los datos creciera notablemente.\cite{naive}\par 
+	Es ahora cuando se añade la suposición \textit{naive}. Hacer esta suposición implica consideran independientes las características de los datos de entrada, la expresión de los datos quedaría de la siguiente forma:
+	\begin{equation}
+		P(a_1, a_2...a_n|\hat{S}) = \prod_{i=1}^{n}{P(a_i|\hat{S})}
+	\end{equation}
+	Para dejar la expresión en función del estimador $\hat{S}$, se puede concluir que:
+	\begin{equation}
+		\hat{S} = arg\hspace{0.2cm}max_{\hat{S}} \hspace{0.2cm} P(y) \prod_{i=1}^{n}{P(a_i|\hat{S})}
+	\end{equation}
+	
+\clearpage
+
+\section{Regresión Logística}
+
+En esta sección se van a introducir los fundamentos del último método que se propone en este TFG.\par 
+
+La regresión logística (\textit{Logistic Regression}) es un tipo de análisis utilizado para predecir el resultado de una variable categórica o dicotómica. Resulta muy útil para modelar la probabilidad de un evento que ocurre en función de otras características o varibles.\cite{RLWiki} \cite{RLIntro} \par 
+
+Es un concepto similar a la regresión lineal \footnote{\url{https://en.wikipedia.org/wiki/Linear_regression}} en cuánto a ver cuánta dependencia existe entre la variable dependiente y las independientes. Suele ser habitual utilizar regresión lineal para problemas dónde la varible de salida es continua o escalar y regresión logísistica cuando es categórica.\par 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{linealVSlogistica}
+	\caption{Regresión lineal vs regresión logística.}
+	\label{fig:linealvslog}
+\end{figure}
+
+El modelado matemático es el siguiente:
+\vspace*{0.5cm}
+Sea \textit{Y} una varible dependiente binaria y un conjunto \textit{k} de variables independientes \textit{X}:
+\begin{equation}
+	P(Y|X_1, X_2...X_k)
+\end{equation}
