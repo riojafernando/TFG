@@ -1,0 +1,38 @@
+\chapter {Introducci\'on}
+
+	El objetivo de este Trabajo Fin de Grado (TFG) es la clasificación de diferentes tipos de arritmias que se producen en la Unidad de Cuidados Intensivos (UCI), ya que muchas de ellas se demuestran falsas o que no necesitan atención inmediata. Para ello, se va a utilizar una técnica muy empleada en el \textit{Machine Learning}, como es la clasificación mediante árboles de decisión, concretamente, el módulo de Python \textit{Xgboost}. Antes de ejecutar el algoritmo será necesario preprocesar los datos y llevar a cabo un análisis exploratorio de los mismos donde se estudie el comportamiento una extendida técnica: Análisis de componentes principales (ACP o más comúnmente PCA).\par 
+
+\section{Motivación}
+	Las estancias hospitalarias no son agradables. Cortas, largas, graves o leves, todos los pacientes quieren evitarlas o suavizarlas lo más posible. El interés crece cuando se trata de una estancia en la UCI, ya de por sí, compplicada.\par 
+\vspace*{0.5cm}
+	El excesivo número de alarmas de la UCI perjudican tanto al paciente que la eleva, al resto de pacientes ingresados e incluso, al personal sanitario. Provoca interrupciones en la atención, ralentiza los tiempos de respuesta del personal, ya que si suena una alarma en la UCI, se atiende, dejando la tarea que se esté realizando. El personal sanitario pierde sensibilidad ante las mismas alarmas, porque en su mayoría no son situaciones críticas que haya que tratar en este instante.\cite{PhysionetIntro}\par 
+\vspace*{0.5cm}
+	El presente TFG se va a centrar en pacientes cuyo motivo de ingreso sea que sufren algún tipo de arritmia y en las alarmas que esto provoca. Para ello, disponemos de una base de datos con señales medidas en pacientes que ingresaron con algún tipo de arritmia y que hicieron saltar alguna alarma en la UCI.\par 
+\vspace*{0.5cm}
+	¿Por qué \textit{Xgboost}? Porque los árboles de decisión son una técnica muy eficaz para la clasificación binaria \textit{(decisión)}. Porque xgboost ha demostrado en casos similares, no resulta difícil encontrar competiciones en Kaggle\cite{Kaggle} donde los ganadores, incluso los puestos de podio, son implementaciones apoyándose en Xgboost.\par 
+\vspace*{0.5cm}
+	Los árboles de clasificación son una herramienta muy utilizada en el aprendizaje máquina. Existen otros algoritmos como las redes neuronales, regresión logística o naive Bayes. En este TFG se van a comparar los resultados obtenidos aplicando algoritmos más sencillos de implementar cómo son: naive Bayes y regresión logística, contra los ya mencionados árboles de clasificación, que son un poco más complejos. Por otro lado, la técnica que vamos a utilizar en el análisis exploratorio de los datos (PCA) es una herramienta que se utiliza generalmente para reducir la dimensionalidad de los datos.\cite{PCAWiki}\par 
+\vspace*{0.5cm}
+	Se trata de un proceso cuidadoso, dónde es necesario fijar parámetros clave en tanto en el análisis exploratorio como en el algoritmo de clasificación. No obstante, se extraen unas características más computables (números) cuando tenemos un volumen de datos elevado, cómo ocurre en nuestro caso.\par 
+	
+\section{Objetivos}
+
+	El objetivo principal es clasificar las alarmas de la UCI producidas por arritmias como \textit{Falsa Alarma} (FA) o \textit{True Positive} (TP).
+\vspace*{0.5cm}
+	Para conseguirlo, vamos a utilizar análisis de componentes principales como herramienta para el análisis exploratorio de los datos. Después una técnica de \textit{machine learning} como los árboles de clasificación y se comprarán sus resultados con otros dos algoritmos: naive Bayes y regresión logística. Se pretende:
+	
+\begin{itemize}
+	\item Simplificar la base de datos existente, extrayendo características fácilmente computables.
+	\item Procesar las señales que componen cada alarma. 
+	\item Clasificar las alarmas como FA o TP siguiendo el modelo diseñado basado en árboles de clasificación, naive Bayes y regresión logística.
+\end{itemize}
+
+\section{Estructura de la memoria}
+	La disposición de este Trabajo Fin de Grado es la siguiente:
+\begin{itemize}
+	\item En el Capítulo 2 se presenta Physionet así como nociones básicas sobre cardiología y arritmias.
+	\item En el Capítulo 3 se presentan los datos con los que vamos a tratar. Presentación, duración y características.
+	\item En el Capítulo 4 se exponen los conceptos del análisis exploratorio y de \textit{machine learning}. Se explica en detalle cómo funciona el módulo de Python mediante el cual implementaremos los árboles de decisión. Se explicarán también cómo se construyen los modelos de naive Bayes y de regresión logística.
+	\item En el Capítulo 5 se exponen los resultados obtenidos a la salida de los algoritmos.
+	\ En el Capítulo 6 se comentan y analizan los resultados obtenidos y las líneas de investigación futuras.
+\end{itemize}	
