@@ -9,10 +9,13 @@ right=2.5cm
 {geometry}
 \usepackage{mathtools}
 \usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
 \usepackage{titlesec}
+\usepackage{lmodern}
+\usepackage{layout}
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
-\usepackage{enumitem} 
 \usepackage{url}
 \usepackage{float}
 \usepackage{amsmath}
@@ -20,9 +23,11 @@ right=2.5cm
 \usepackage{listings}
 \usepackage{booktabs}
 \usepackage[normalem]{ulem}
-\usepackage{subcaption}
 \usepackage{mwe}
 \usepackage{afterpage}
+\usepackage{enumerate}
+\usepackage{cite}
+\usepackage{multirow} % para las tablas
 \useunder{\uline}{\ul}{}
 \graphicspath{ {images/} }
 \usepackage{fancyhdr}
@@ -34,19 +39,26 @@ right=2.5cm
 \begin{document}
 \include{portada}
 \clearpage
+\include{agradecimientos}
+\clearpage
+\include{resumen}
+\clearpage
+\include{abstract}
 \tableofcontents % indice de contenidos
 
-\cleardoublepage
+\clearpage
 \addcontentsline{toc}{chapter}{Lista de figuras} % para que aparezca en el indice de contenidos
 \listoffigures % indice de figuras
 
 \cleardoublepage
-\addcontentsline{toc}{chapter}{Lista de tablas} % para que aparezca en el indice de contenidos
-
+%\addcontentsline{toc}{chapter}{Lista de tablas} % para que aparezca en el indice de contenidos
 \cleardoublepage
 \include{Introduccion}
 \include{EstadoDelArte}
-\include{descripciondatos}
+\include{DescripciondelosDatos}
+\include{metodos}
+\include{analisis}
+\include{conclusiones}
 \clearpage
 \include{bibliografia}
 \end{document}
