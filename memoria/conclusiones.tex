@@ -1,0 +1,32 @@
+\chapter{Conclusiones y líneas futuras}
+
+En el primer capítulo de este TFG, se establecieron una serie de objetivos:
+\begin{enumerate}
+	\item Simplificar la base de datos extrayendo características más fácilmente computables.
+	\item Procesar las señales.
+	\item Clasificación de alarmas en falsas o positivas y evaluar el rendimiento de los algoritmos propuestos.
+\end{enumerate}
+
+Los objetivos se han llevado a cabo con éxito:
+\begin{enumerate}
+	\item Se ha aplicado una técnica de análisis exploratorio de los datos como es PCA, con el fin de tener datos más manejables. Cabe recordar que en la base de datos existían 750 pacientes cada uno de ellos con 3-4 señales de unas 80.000 muestras cada una. 
+	Ahora, habiéndose utilizado aproximadamente la mitad de la base de datos (los pacientes con 4 señales) se han reducido las características a 20 dígitos normalizados por paciente.
+	\item Para poder realizar esto, previamente se tuvo que realizar un enventanado de las señales, para subdividir el problema y a su vez poder tener mejor caracterizadas a los pacientes, que si, por ejemplo, se hubiese aplicado PCA directamente.
+	\item Se han llevado a cabo los algoritmos, poniendo especial interés en los árboles de clasificación implementados con la librería \textit{xgboost} y comparándolo con modelos que teóricamente funcionan bien para la clasificación binaria.
+	También se analizaron sus métricas, así como se expuso un nuevo algoritmo combinando las salidas de los que mejores resultados obtuvieron.
+\end{enumerate}
+
+Como también se ha mencionado en este TFG, el problema abarcada más facetas de las que se han abordado,(ver que tipo de arrimia provocaba las alarmas, analizar las señales antes y después de la alarma).\par 
+La extensión temporal de haber intentado resolver esos problemas, así como su complejidad son las razones de no haberlos planteado en este TFG. No obstante, ese sería el camino para futuras investigaciones sobre este tema, que requiere sin duda de bastante interés. \par 
+
+Las futuras acciones para profundizar en la solución completa de este problema podrían ser:
+\begin{itemize}
+	\item Probar con otra técnica de análisis exploratorio de datos, como por ejemplo, una técnica no lineal \textit{Kernel Principal Componet Analysis}.
+	\item Evaluar si el tamaño de la ventana es el óptimo. Realmente no existe certeza de que parte de la señal es la que más información tiene una vez aplicado PCA, luego se podría probar con ventanas más extensas o más cortas.
+	\item Se podría evaluar la multiclasificación original del problema. Bien con el algoritmo propuesto \textit{xgboost} o con otros algoritmos de clasificacion como redes neuronales por ejemplo.
+	\item El nuevo algoritmo propuesto en último lugar, podría mejorarse ponderando, por ejemplo con mas peso las decisiones de \textit{xgboost} que es un modelo más completo y que no adolece de \textit{overfitting}. Por el contrario, \textit{naive Bayes} en este TFG se ha utilizado como una herramienta comparativa. Es por ello que no se ha puesto más interés en este modelo.
+\end{itemize}
+
+Estas extensiones requieren de técnicas más complejas y de \textit{machine learnig} y con más carga computacional, ya que los algoritmos tendrían que ser más complejos.\par 
+\vspace*{0.5cm}
+Todo el código escrito para este TFG se encuentra en el siguiente repositorio de GitHub: \url{https://github.com/riojafernando/TFG}
