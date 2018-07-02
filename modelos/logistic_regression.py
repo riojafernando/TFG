@@ -26,7 +26,7 @@ X_train, X_test, y_train, y_test = \
 
 
 model.fit(X_train,y_train)
-print model
+print(model)
 
 #train and save this model
 y_lr = model.predict(X_test)

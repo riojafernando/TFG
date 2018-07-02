@@ -57,16 +57,16 @@ y_xgb = np.load('y_xgb.npy')
 y_prob_xgb = np.load('y_prob_xgb.npy')
 
 accuracy = accuracy_score(y_test, y_xgb)
-print "accuracy_score: " + str(accuracy)
+print("accuracy_score: ",str(accuracy))
 
 precision = precision_score(y_test, y_xgb)
-print "precision_score: " + str(precision)
+print("precision_score: ",str(precision))
 
 f1 = f1_score(y_test, y_xgb)
-print "f1: " + str(f1);
+print ("f1: ",str(f1))
 
 recall = recall_score(y_test, y_xgb)
-print "recall_score: " + str(recall)
+print("recall_score: " ,str(recall))
 # Compute confusion matrix
 cnf_matrix = confusion_matrix(y_test, y_xgb)
 # Plot non-normalized confusion matrix
@@ -78,19 +78,19 @@ plot_confusion_matrix(cnf_matrix, classes=class_names,
 print("- Naive Bayes -")
 print("===============")
 ######### NAIVE BAYES #############
-y_nb = np.load('y_nb2.npy')
+y_nb = np.load('y_nb.npy')
 y_prob_bn = np.load('y_prob_nb.npy')
 accuracy = accuracy_score(y_test, y_nb)
-print "accuracy_score: " + str(accuracy)
+print("accuracy_score: ",str(accuracy))
 
 precision = precision_score(y_test, y_nb)
-print "precision_score: " + str(precision)
+print("precision_score: ",str(precision))
 
 f1 = f1_score(y_test, y_nb)
-print "f1: " + str(f1);
+print("f1: " ,str(f1))
 
 recall = recall_score(y_test, y_nb)
-print "recall_score: " + str(recall)
+print("recall_score: ",str(recall))
 
 # Compute confusion matrix
 cnf_matrix = confusion_matrix(y_test, y_nb)
@@ -106,16 +106,16 @@ print("- Logistic Regression -")
 print("=======================")
 y_lr = np.load('y_lr.npy')
 accuracy = accuracy_score(y_test, y_lr)
-print "accuracy_score: " + str(accuracy)
+print("accuracy_score: " ,str(accuracy))
 
 precision = precision_score(y_test, y_lr)
-print "precision_score: " + str(precision)
+print("precision_score: ",str(precision))
 
 f1 = f1_score(y_test, y_lr)
-print "f1: " + str(f1);
+print ("f1: ", str(f1))
 
 recall = recall_score(y_test, y_lr)
-print "recall_score: " + str(recall)
+print ("recall_score: ",str(recall))
 
 
 # Compute confusion matrix
@@ -132,16 +132,16 @@ print("- Combine Model -")
 print("===============")
 y_combine = np.load('y_combine.npy')
 accuracy = accuracy_score(y_test, y_combine)
-print "accuracy_score: " + str(accuracy)
+print("accuracy_score: ",str(accuracy))
 
 precision = precision_score(y_test, y_combine)
-print "precision_score: " + str(precision)
+print("precision_score: ",str(precision))
 
 f1 = f1_score(y_test, y_combine)
-print "f1: " + str(f1);
+print("f1: ",str(f1))
 
 recall = recall_score(y_test, y_combine)
-print "recall_score: " + str(recall)
+print("recall_score: ",str(recall))
 
 # Compute confusion matrix
 cnf_matrix = confusion_matrix(y_test, y_combine)

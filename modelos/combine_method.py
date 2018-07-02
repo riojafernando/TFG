@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 #combine methods
 
 #cargamos los modelos de naive bayes y de xgboost
-y_nb = np.load('y_nb2.npy')
+y_nb = np.load('y_nb.npy')
 y_xgb = np.load('y_xgb.npy')
 
 y_prob_nb = np.load('y_prob_nb.npy')
@@ -38,7 +38,7 @@ for i in range(len(y_nb)):
     elif y_nb[i] == 0 and y_xgb[i] == 1:
         if y_prob_xgb[i,1] > y_prob_nb[i,0]:
             combine[i] = 1
-        elif y_prob_nb[i,0] > y_prob_xgb[i,1]:
+        elif y_prob_nb[i,0] > y_prob_xgb[i,1]+0.2:
             combine[i] = 0
             
             

@@ -72,9 +72,8 @@ best_model.fit(X_train,y_train,sample_weight = sample_weight)
 #ahora ya podemos sacar métricas.
 
 y_pred_xgb = best_model.predict(X_test)
-y_prob_xgb = model.predict_proba(X_test)
+y_prob_xgb = best_model.predict_proba(X_test)
 #save our results
 np.save('y_xgb.npy', y_pred_xgb)
 np.save('y_prob_xgb.npy', y_prob_xgb)
 np.save('y_test.npy', y_test);
-

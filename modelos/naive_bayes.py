@@ -17,8 +17,8 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import StratifiedKFold
 import matplotlib.pyplot as plt
 
-X = np.load("Data.npy")
-Y = np.load("Output.npy")
+X = np.load("../Data.npy")
+Y = np.load("../Output.npy")
 X = np.delete(X, (380), axis=0)
 Y = np.delete(Y, (380), axis=0)
 model = GaussianNB()#load model
@@ -29,10 +29,10 @@ X_train, X_test, y_train, y_test = \
 
 
 model.fit(X_train,y_train)
-print model
+print(model)
 #evalate model on training set
 y_nb = model.predict(X_test)
-np.save('y_lr.npy', y_nb)
+np.save('y_nb.npy', y_nb)
 
 y_prob_nb = model.predict_proba(X_test)
-np.save('y_prb_nb', y_prob_nb)
+np.save('y_prob_nb', y_prob_nb)
