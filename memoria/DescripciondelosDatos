@@ -1,0 +1,124 @@
+\chapter{Descripción de los datos}
+En este capítulo se definen los datos del TFG, también se explica en qué consisten las arritmias que componen la base de datos y qué procesado se va a aplicar a las señales para poderlas utilizar como entrada del algoritmo.
+
+\section{Obtención de las señales}
+En el organismo humano se pueden medir numerosas señales, que en esencia, son magnitudes físicas: presión, potencial eléctrico, frecuencia...\par 
+Concretamente, se van a detallar las señales que tenemos en la base de datos explicando qué son y cómo se obtienen. 
+Electrocardiograma (ECG): es la representación gráfica de la actividad eléctrica del corazón en función del tiempo. \cite{ecgwiki} 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=5cm]{ondas-ekg.png}
+	\caption{Señal de ECG dividida en sus partes más significativas.\cite{dibujo-ondap}}
+	\label{fig:qrs}
+\end{figure}
+	
+Como se puede apreciar en la Figura \ref{fig:qrs} hay varias partes significativas en la onda. Vamos a explicarlas brevemente:
+\begin{itemize}
+\item Onda P: Es la primera onda del ciclo cardíaco. Representa la despolarización de las aurículas. El principio corresponde a la despolarización de la aurícula derecha y el final al de la izquierda. La duración normal de la onda P es menor de 0,10s (2,5mm de ancho) y un voltaje máximo de 0,25 mV (2,5 mm de alto).\par 
+\item Complejo QRS: El complejo QRS corresponde a la corriente eléctrica que causa la contracción de los ventrículos derecho e izquierdo (despolarización ventricular). Es mucho más potente que la de las aurículas y tiene en cuenta más masa muscular, es por esto, que se aprecia más en el ECG.
+\begin{itemize}
+\item Onda Q: Primera onda del complejo QRS, es una onda negativa. Suele ser estrecha y poco profunda (menor de 0.04 s de ancho, 2 mm de profundidad). Si hay una mínima onda positiva en el complejo QRS previa a una onda negativa, la onda negativa no es una Q, es una onda S, por muy pequeña que sea la onda positiva previa.
+\item Onda R: Es la primera onda positiva del complejo QRS, puede estar precedida de una onda negativa (onda Q) o no.
+\item Onda S: Es la onda negativa que aparece después de la onda R.
+\item Onda Q-S: Cuando un complejo es completamente negativo, sin presencia de onda positiva, se le denomina QS. Suele ser un signo de necrosis cardíaca.
+\item Ondas R' y S': Cuando hay más de una onda R o más de una onda S, se les denomina R' y S'.
+\end{itemize}
+\item Onda T: Representa la repolarización de los ventrículos. Generalmente es de menor amplitud que el QRS que le precede. Su amplitud máxima es menor de 5 mm en derivaciones periféricas \footnote{\url{https://www.youbioit.com/es/article/24529/derivaciones-perifericas-del-electrocardiograma}} y menor de 15 mm en derivaciones precordiales\footnote{\url{http://www.my-ekg.com/generalidades-ekg/derivaciones-cardiacas.html}}.
+\end{itemize}
+Esta actividad se recoge mediante dos electrodos. En función de dónde se coloquen esos electrodos obtenemos distintas derivaciones. Siguiendo un símil fotográfico, las derivaciones son como diferentes ángulos o perspectivas de la misma fotografía.\par 
+\begin{itemize}
+\item \textbf{I Derivación:} Mide la diferencia de potencial entre el electrodo del brazo derecho y el izquierdo.
+\item \textbf{II Derivación:} Se mide del brazo derecho a la pierna izquierda.
+\item \textbf{III Derivación:} Diferencia de potencial entre el brazo izquierdo y la pierna izquierda.
+\item \textbf{La derivación aVR (augmented vector right):} tiene el electrodo positivo (blanco) en el brazo derecho. El electrodo negativo es una combinación del electrodo del brazo izquierdo (negro) y el electrodo de la pierna izquierda (rojo), lo que "aumenta" la fuerza de la señal del electrodo positivo del brazo derecho.
+\item \textbf{La derivación aVL (augmented vector left):} tiene el electrodo positivo (negro) en el brazo izquierdo. El electrodo negativo es una combinación del electrodo del brazo derecho (blanco) y la pierna izquierda (rojo), lo que \"aumenta" la fuerza de la señal del electrodo positivo del brazo izquierdo.
+\item \textbf{La derivación aVF (augmented vector foot):} tiene el electrodo positivo (rojo) en la pierna izquierda. El electrodo negativo es una combinación del electrodo del brazo derecho (blanco) y el brazo izquierdo (negro) lo que "aumenta" la señal del electrodo positivo en la pierna izquierda.
+\item Los electrodos para las derivaciones precordiales (V1, V2, V3, V4, V5, y V6) están colocados directamente sobre el pecho. Debido a su proximidad con el corazón, no es necesario aumentarlas. 
+Las derivaciones precordiales ven la actividad eléctrica del corazón en el denominado plano horizontal. El eje eléctrico del corazón en el plano horizontal se denomina el eje Z.
+\end{itemize}
+Por lo tanto hay 12\ref{fig:12} derivaciones en total:\par 
+Las derivaciones inferiores (III y aVF) detectan la actividad eléctrica desde el punto superior de la región inferior (pared) del corazón. Esta es la cúspide del ventrículo izquierdo.\par 
+Las derivaciones laterales (I, II, aVL, V5 y V6) detectan la actividad eléctrica desde el punto superior de la pared lateral del corazón, que es la del ventrículo izquierdo.\par 
+Las derivaciones anteriores, V1 a V6 representan la pared anterior del corazón o la pared frontal del ventrículo izquierdo.\par 
+aVR raramente se utiliza para la información diagnóstica, pero indica si los electrodos se han colocado correctamente en el paciente.\par 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=10cm]{12derivations}
+	\caption{Forma de onda de las 12 derivaciones posibles del ECG.}
+	\label{fig:12}
+\end{figure}
+El objetivo concreto del challenge (y de este TFG), es la reducción de falsas alarmas producidas por arritmias. Para ofrecer una visión más clara, se va a presentar brevemente que es una arritmia y de qué tipos son las que aparecen en la base de datos.\par 
+
+Una \textbf{arritmia} es un trastorno de la frecuencia cardíaca (pulso) o del ritmo cardíaco\cite{arritmia}. Su estudio es importante ya que, puede no causar daño, ser una señal de otros problemas cardíacos o un peligro inmediato para su salud, como bien podrían ser las que provocan alarmas en la UCI. Normalmente, el corazón trabaja como una bomba que lleva sangre a los pulmones y al resto del cuerpo.
+
+Para ayudar a que esto suceda, el corazón tiene un sistema eléctrico que garantiza que se contraiga (comprima) de manera ordenada. 
+El impulso eléctrico que da la señal al corazón para contraerse comienza en un área del corazón llamada nodo sinoauricular (también llamado nodo sinusal o nódulo SA). Este es el marcapasos natural del corazón. Diferentes mensajes nerviosos le dan la señal al corazón para palpitar más lento o más rápido. Las arritmias pueden presentar anomalías en las señales cardíacas (o pueden aparecer otras nuevas), las señales eléctricas pueden sufrir variaciones temporales, se pueden retrasar o adelantar o incluso pueden viajar por rutas diferentes por el corazón.
+
+Algunas causas usuales de latidos anormales del corazón son:
+\begin{itemize}
+	\item Niveles anormales de potasio u otras sustancias en el cuerpo.
+	\item Ataque al corazón o daños que existan en el miocardio debidos a un ataque previo.
+	\item Cardiopatía congénita.
+	\item Insuficiencia cardíaca o un agrandamiento desmedido del corazón.
+	\item Hipertiroidismo.
+\end{itemize}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=8cm]{corazon}
+	\caption{Partes del corazón.}
+	\label{fig:coraz}
+\end{figure}
+
+En la base de datos tenemos 5 tipos de arritmias:\cite{PhysionetIntro}
+\begin{enumerate}
+	\item \textbf{Asístola:} Sin complejo QRS durante al menos 4 segundos.
+	\item \textbf{Bradicardia extrema:} durante 5 latidos seguidos, el pulso cardiaco más bajo de 40bpm. Menos de 5 latidos en 6 segundos.
+	\item \textbf{Taquicardia extrema:} durante 17 latidos, el pulso más alto de 140 bpm. Más de 17 latidos en 6.85 segundos.
+	\item \textbf{Taquicardia ventricular:} 5 o más latidos ventriculares con el pulso mayor de 100bpm (en un periodo de 2.4 segundos).
+	\item \textbf{Fibrilación ventricular:} fibrilación o alteración de la forma de onda de al menos 4 segundos.
+\end{enumerate}
+
+	En la figura \ref{fig:coraz} se observa una imagen sencilla para ubicar las partes básicas del corazón.\par 
+	
+	Principalmente en este TFG se analizan derivaciones de ECGs, ya que es lo más abundante en la base de datos. Pero también se apoyan en otras señales que se registraron para ayudar a la clasificación:
+\begin{itemize}
+	\item \textbf {ABP (Ambulatory Blood Pressure):} método técnico no invasivo\footnote{\url{https://medlineplus.gov/spanish/ency/article/002269.htm}}, que pretende obtener medidas sobre la presión arterial durante un cierto periodo de tiempo.
+	\item \textbf{PPG (Photoplethysmogram):} Consiste en medir las variaciones del nivel sanguíneo en alguna zona del cuerpo. Existen varios métodos, pero este en concreto mide la variación de la longitud de onda en la piel para determinar la concentración.\cite{pleti}
+	\item \textbf{Respiración:} Se mide la respiración a través del ECG. Se ha demostrado que es mucho menos estresante para el paciente y, por tanto, provoca menos errores en la medida.\cite{respiracion}
+\end{itemize}
+	
+\section{Descripción de la competición}
+	Como ya se ha mencionado anterioremente el objetivo del challenge es clasificar las arritmias detectadas como reales o falsas. A su vez también se propone que se identifique, en el caso de que exista arritmia a que clase corresponde de las 5 que tenemos en la base de datos.\par 
+	
+La muestra fue elegida con el fin de que represente fielmente la distribución de la realidad, quedando de la siguiente forma:
+\begin{itemize}
+	\item 47\% Taquicardia Ventricular.
+	\item 17\% Asístola.
+	\item 17\% Taquicardia extrema.
+	\item 11\% Bradicardia extrema.
+	\item 7\% Fibrilación ventricular.
+\end{itemize}
+ 
+	El desafío se divide en dos partes\cite{partes_challenge}
+\begin{itemize}
+	\item \textbf{1ª Parte:} El algoritmo se basa sólo en la información en tiempo real, es decir, que sólo disponemos de la(s) señal(es) antes de que se produjese la alarma.
+	\item \textbf{2ª Parte:} El algoritmo era capaz de incorporar a su esquema 30 segundos una vez la alarma se había producido. Es ahí cuando utiliza esta información como realimentación al algoritmo y decide si la alarma era falsa o verdadera.
+\end{itemize}
+
+\clearpage
+
+Se va a analizar como queda repartida la base de datos según las señales disponibles de cada paciente. Hay que tener en cuenta que sólo se dispone del conjunto de entrenamiento \textit{(training)}, ya que, el conjunto de prueba \textit{(test)} es el conjunto reservado para Physionet como organizador del \textit{challenge} para comprobar los resultados del mismo. Luego, como sólo está disponible para su estudio el primer conjunto de datos, se procederá a subdividirlo para poder evaluar el rendimiento del los algoritmos. 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{numerosenales}
+	\caption{Número de señales registradas de cada paciente según su tipo de arritmia y si es falsa alarma o no.}
+	\label{fig:numero}
+\end{figure}
+
+	El \textit{challenge} propone una puntuación para ponderar los aciertos y los fallos de los participantes. Siguen la siguiente fórmula:
+\begin{equation}\label{eq:score}
+	Score = \frac{100 * (TP + TN)}{TP + TN + FP + 5 * FN}
+\end{equation}
+	
+ 
