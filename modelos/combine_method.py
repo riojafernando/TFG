@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Jun 29 13:51:16 2018
-
 @author: Fernando
 """
 import numpy as np
@@ -9,17 +8,7 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 #combine methods
 
-X = np.load("../Data.npy");
-Y = np.load("../Output.npy")
-#X = np.load(data)
-#Y = np.load(output)
-
-
-#Aqui faltaria hacer tambien la separacion entre train y test
-X_train, X_test, y_train, y_test = \
-            train_test_split(X, Y, test_size=0.15, random_state=0)
-
-
+#cargamos los modelos de naive bayes y de xgboost
 y_nb = np.load('y_nb2.npy')
 y_xgb = np.load('y_xgb.npy')
 
@@ -53,7 +42,6 @@ for i in range(len(y_nb)):
             combine[i] = 0
             
             
-y_hat_combine = combine
+y_combine = combine
 
-#get classification results
-classification_report(y_test,y_hat_combine)
+np.save('y_combine.npy', y_combine)
