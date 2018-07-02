@@ -52,12 +52,7 @@ print("Saved model to: pima.pickle.dat")
 # load model from file
 grid_result = pickle.load(open("xgboost_CV.pickle.dat", "rb"))
 
-#Con el mejor resultado, crear un modelo xgboost que tenga los hiperparametros del mejor resultado
-#luego probar los resultados en test y comparar contra naive bayes y regresion logistica
-
-#---------------------#---------------------#---------------------#---------------------#---------------------
-#DE AQUI HACIA ABAJO SIN HABER PROBADO EN DETALLE. LO TIENE QUE EJECUTAR Y DEPURAR TU------
-#---------------------#---------------------#---------------------#---------------------#---------------------
+#escogemos los mejores parámetros del modelo
 m_d = grid_result.best_params_['max_depth']
 l_r = grid_result.best_params_['learning_rate']
 n_e = grid_result.best_params_['n_estimators']
@@ -68,13 +63,18 @@ best_model = XGBClassifier(max_depth =m_d,learning_rate = l_r,n_estimators = n_e
 
 best_model.fit(X_train,y_train)
 
+sample_weight = np.ones(np.size(y_train))*0.55
+sample_weight[y_train == 0] = 0.45
+
+
+best_model.fit(X_train,y_train,sample_weight = sample_weight)
+
 #ahora ya podemos sacar métricas.
 
-y_pred = best_model.predict(X_test)
-y_pred_prob = best_model.predict_proba(X_test)
+y_pred_xgb = best_model.predict(X_test)
+y_prob_xgb = model.predict_proba(X_test)
+#save our results
+np.save('y_xgb.npy', y_pred_xgb)
+np.save('y_prob_xgb.npy', y_prob_xgb)
+np.save('y_test.npy', y_test);
 
-#vamos a sacar también información de la curva ROC y también vamos a ver como cambia todo moviendo los thresholds
-#esto te lo explico en persona la semana que viene mejor.
-
-#todo el resumen de la matriz de confusión y demás.
-print(confusion_matrix(y_test,y_pred))
