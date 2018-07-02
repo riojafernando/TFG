@@ -1,0 +1,208 @@
+\chapter{Análisis y resultados}
+
+Una vez definida la teoría matemática, en esta sección se explican las bibliotecas y módulos de Python utilizados para llevar a cabo este TFG. Después de detallarán resultados y se realizará un breve comentario de los mismos. \par 
+
+\section{\textit{Sklearn}}
+
+\textit{Sklearn} es una biblioteca abierta que contiene gran cantidad de módulos para poder resolver problemas de \textit{machine learning}. Concretamente de esta biblioteca sale la función con la que vamos a utilizar \textit{naive Bayes}. La función es: GaussianNB.
+
+\subsection{\textit{GaussianNB}}
+
+\textit{GaussianNB} es una función muy intuitiva y sencilla. Consta de un único parámetro \textit{priors} \cite{gaussiannb}, que establece dentro de un array las probabilidades \textit{a priori} de cada clase de entrada. En este TFG se ha optado por no modificar este parámetro por la siguiente razón: aunque los datos no estén completamente balanceados, existen más casos de falsas alarmas, se quiere partir de una hipótesis equiprobable ya que cuando salta una alarma en la UCI se ha querido ponderar con más peso.
+
+\subsection{\textit{LogisticRegression}} 
+
+El segundo método importante, también procedente de \textit{Sklearn}, es \textit{LogisticRegression}, la función que se ha utilizado para el modelo basado en regresión logística. \cite{logisticregression}
+
+No obstante, en este TFG, por simplificar y porque no se trataba del objetivo principal, se ha optado por no modificar los parámetros por defecto de \textit{LogisticRegression}, que son los siguientes:
+\begin{itemize}
+\item \textit{\textbf{penalty}}: La norma de la penalización. Por defecto L2.
+\item \textit{\textbf{dual}}: Formulación dual o  primaria. \textit{False} cuando hay más muestras que características. Por defecto \textit{False}. 
+\item \textit{\textbf{tol}}: Tolerancia para detener los criterios. Por defecto $1 x 10^{-4}$ 
+\item \textit{\textbf{C}}: Inversa de la fuerza de regularización. Valores pequeños especifican una regularización más fuerte. Por defecto 1.0.
+\item \textit{\textbf{fit\_intercept}}: Especifica si se tiene que añadir alguna constante(sesgo, intersección...). Por defecto \textit{True}.
+\item \textit{\textbf{intercept\_scaling}}: Cuando se usa \textit{liblinear} y self.fit\_intercept está en True. En este caso, x se convierte en [x, self.intercept\_scaling], es decir, se agrega una característica "sintética" con un valor constante igual a intercept\_scaling. Por defecto $1.0$
+\item \textit{\textbf{class\_weight}}: Pesos asociados con las clases en la forma: {class\_label: weight}. Si no se da, se supone que todas las clases tienen peso uno.
+\item \textit{\textbf{random\_state}}: Se tiene la posibilidad de establecer una semilla para los números pseudoaleatorios. Por defecto esta a \textit{None}.
+\item \textit{\textbf{solver}}: Algoritmo empleado para la optimización de la solución. Para conjuntos de datos pequeños \textit{liblinear} es una buena opción y es la que viene por defecto. Existen otras configuraciones como: \textit{newton-cg} o \textit{sag} para problemas de multiclasificación. 
+\item \textit{\textbf{max\_iter}}: Número máximo de iteraciones. Útil sobre todo para los los modos de resolución \textit{newton-cg} o \textit{sag}, que son algoritmos más complejos. Por defecto viene fijado a 100.
+\item \textit{\textbf{multi\_class}}: Puede ser \textit{ovr} o \textit{multinominal}. Si la opción es \textit{ovr} se trata de un problema binario. El valor por defecto es \textit{ovr}.
+\item \textit{\textbf{verbose}}: Posibilidad de incrementar el número de mensajes que ofrece el módulo. Por defecto viene con el valor 0.
+\item \textit{\textbf{warm\_start}}: Por defecto en falso. Cuando se selecciona \textit{True}, reutiliza la solución de la llamada anterior como ajuste de inicialización. No es útil para \textit{liblinear}.
+\item \textit{\textbf{n\_jobs}}: Número de CPUs que ejecutan en paralelo. Como el modelo planteado en este problema es sencillo, se queda en el valor por defecto, 1.
+\end{itemize}
+
+\section{\textit{XgBoost}}
+
+En este apartado se explican los detalles (parámetros) que se pueden configurar en el clasificador que se utiliza.\par 
+
+Para poder llevar a cabo este TFG, se ha necesitado importar el clasificador \textit{XGBClassifier} de la libreria \textit{xgboost}. Como se ha visto en los dos modelos anteriores, \textit{XGBClassifier} también dispone de varios parámetros configurables, y nos centraremos especialmente en tres:
+\begin{itemize}
+\item \textbf{\textit{n\_estimators}}: Número de árboles en el modelo. En este TFG se ha probado con un total de 13 posibilidades, en saltos de 30 árboles: [20, 50, 80,..., 350, 380].
+\item \textbf{\textit{max\_depth}}: Tamaño de los árboles de decisión. También se suele llamar número de capas o profundidad/frondosidad del bosque. En este trabajo se ha probado también varias opciones: [2, 4, 6, 8].
+\item \textbf{\textit{learning\_rate}}: Tasa de aprendizaje. Cómo de rápido aprende el modelo. Es necesario fijarlo, ya que si se no se configura, este tipo de modelos aprende demasiado rápido y adolecería de \textit{overfitting}\cite{XGBoost} También se evalúan diferentes valores: [0.0001, 0.001, 0.01, 0.1, 0.2, 0.3].
+\end{itemize}
+
+Como ya se ha mencionado, se entrena el modelo con varios de estos parámetros, escogiendo diferentes conjuntos para entrenamiento y \textit{test}. Esto es necesario para evitar el problema del \textit{overfitting} y esta técnica se llama validación cruzada o \textit{cross-validation} (CV).
+
+\section{Validación cruzada}
+
+\textit{Cross-Validation} es una técnica muy extendida a la hora de intentar eliminar el \textit{overfitting} en los problemas de \textit{machine learning}. Consiste en dividir el conjunto de datos en dos, de entrenamiento y de prueba, y en cada experimento nuevo, variar esos dos conjuntos, es decir, escoger otro conjunto distinto de entrenamiento y de \textit{test}.\\
+
+Aunque es una buena solución que ayuda a tener más información, esto lleva el coste asociado de tener una alta carga computacional, lo que hace que el algoritmo que se está evaluando ralentice muy notablemente su velocidad de ejecución.\\
+
+Existen diferentes formas de llevar a cabo esta técnica:\cite{cv-wiki}
+\begin{itemize}
+\item \textbf{Validación cruzada de K iteraciones} \textit{(K-fold cross-validation)}: En cada iteración, se elige un subconjunto de datos de entrenamiento diferente k, y se valida sobre el subconjunto de test k-1. 
+\item \textbf{Validación cruzada aleatoria}: la elección del subconjunto
+de datos de entrenamiento y de test se hace de forma aleatoria.
+\item \textbf{Validación cruzada dejando uno fuera} \textit{(Leave-one-out cross-
+validation, LOOCV )}: se tiene un solo dato de prueba y el resto de entrenamiento. Se repite el modelo K veces, dejando cada vez un dato diferente fuera.
+\end{itemize}
+
+Es este trabajo se ha utilizado el primer método conocido como \textit{K-fold cross-validation} . Este método es muy preciso puesto que evaluamos a partir de K combinaciones de datos de entrenamiento y de prueba\cite{cv-wiki}. Su contrapeso es que es de los más lentos a nivel computacional.\\
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{cross-validation}
+	\caption{Ejemplo de un entrenamiento basado en \textit{K-fold cross-validation}.}
+	\label{fig:CV}
+\end{figure}
+
+Para entrenar poner en práctica el entrenamiento con \textit{cross-validation} se utilizará la función 'GridSearchCV' perteneciente a la librería sklearn.model\_selection. Como parámetros se le han pasado los siguientes:
+\begin{enumerate}
+\item \textbf{model}: XGBClassifier.
+\item \textbf{param\_grid}: Conjunto de parámetros con: \textit{n\_estimators}, \textit{max\_depth}, \textit{learning\_rate}.
+\item \textbf{scoring}: neg\_loss\_loss. Función de pérdida con forma logarítmica.
+\item \textbf{n\_jobs}: 1. Número de CPUs que ejecutan en paralelo.
+\item \textbf{cv}: Validación cruzada que se desee definir. En este caso, k = 8.
+\end{enumerate}
+
+\section{Resultados}
+
+\subsection{Matriz de confusión}
+La matriz de confusión es una buena técnica para resumir el rendimiento de un algoritmo de clasificación. \cite{confusion} Más lo es aún para problemas de clasificación binaria, dónde es bastante sencillo observar como se comporta el modelo.\par 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=8cm]{conf-matrix}
+	\caption{Matriz de confusión de dimensiones 2x2.}
+	\label{fig:conf}
+\end{figure}
+
+Asociados a esta matriz de confusión se pueden extraer distintos resultados. En este TFG, la clase positiva corresponde con que la alarma era real y la negativa una falsa alarma. De esta forma la matriz sería:
+\begin{itemize}
+	\item \textbf{TP} (\textit{True positive}): Se estaría acertando sobre la existencia de una arritmia.
+	\item \textbf{FN} (\textit{False negative}): La predicción es que la arritmia es negativa, cuando si que era una alarma real.
+	\item \textbf{FP} (\textit{False positive}): Se estima que hay arritmia, cuando no la hay. Más comúnmente se la llama: \textit{probabilidad de falsa alarma (FA)}.
+	\item \textbf{TN} (\textit{True negative}): La predicción es que no existe arritmia, y efectivamente, no la hay.
+\end{itemize}
+
+Ahora que ya se sabe que significa cada apartado, se procede a comparar las matrices de confusión del ejemplo con \textit{xgboost}, \textit{naive bayes} y regresión logística.\par 
+
+El primer algoritmo a analizar va a ser regresión logística. Como podemos ver en la figura \ref{fig:conf_lr}, la regresión logística no permite calcular, por ejemplo, \textit{True negatives}. Tan solo ofrece los aciertos en la clase '1', que en este caso, es \textit{True Alarm}.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=10cm]{conf-logistic}
+	\caption{Matriz de confusión generada con el algoritmo de regresión logística.}
+	\label{fig:conf_lr}
+\end{figure}
+
+En la siguiente figura se comparan los resultados del algoritmo propuesto basado en árboles de decisión (\textit{xgboost}) y de \textit{naive Bayes}.
+
+\begin{figure}[!tbp]
+	\begin{subfigure}[b]{0.49\textwidth}
+		\includegraphics[width=\textwidth, height=\textwidth]{xgboost-confusion}
+		\label{fig:f1}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.49\textwidth}
+		\includegraphics[width=\textwidth, height=\textwidth]{naive-bayes-confusion}
+		\label{fig:f2}
+	\end{subfigure}
+	\caption{Matriz de confusión de \textit{xgboost} vs \textit{naive Bayes}.}
+\end{figure}
+
+Con estas dos matrices se pueden observar varias cosas:
+\begin{enumerate}
+	\item En el primer caso se aciertan más los positivos en \textit{xgboost}, es decir, cuando hay arritmia, el algoritmo propuesto la detecta bastante bien.
+	\item Por el contrario \textit{naive Bayes} acierta más los \textit{true negative}, casos en los que la alarma saltó, no era real.
+	\item En los fallos se aprecia como \textit{xgboost} ofrece menos casos de falsos negativos, es decir, pocas veces ocurre que prediga ausencia de arritmia cuando si que existe.
+	Mientras que \textit{naive Bayes} ofrece mejores resultados de falsos positivos o falsa alarma.
+\end{enumerate} 
+ 
+
+También es de interés comparar valores numéricos. Para ello, existe un módulo en \textit{sklearn} para calcular métricas en los algoritmos de \textit{machine learning}, el módulo se llama: \textit{sklearn.metrics}
+
+\clearpage
+\subsection{\textit{Sklearn.metrics}}
+
+Antes de mostrar los resultados, es necesario explicar brevemente el significado de cada uno:
+\begin{itemize}
+	\item \textbf{\textit{Accuracy}}: Precisión del modelo para detectar aciertos. Se calcula como:
+	\begin{equation}
+	\frac{TP + TN}{TOTAL}
+	\end{equation} 
+	\item \textbf{\textit{Precision}}: Capacidad de n predecir como '1', una muestra que fuese un '0'. Se calcula de la siguiente forma:
+	\begin{equation}
+	\frac{TP}{TP + FP}
+	\end{equation}
+	\item \textbf{\textit{Recall}}: capacidad de clasificar las muestras como '1'. Se calcularía:
+	\begin{equation}
+	\frac{TP}{TP + FN}
+	\end{equation}
+	\item \textbf{\textit{F1 score}}: se promedia de forma ponderada entre las métricas \textit{precision} y \textit{recall}. Se calcula como:
+	\begin{equation}
+	2 * \frac{precision * recall}{precision + recall}
+	\end{equation}
+\end{itemize}
+
+Para comparar de manera clara ambos algoritmos, se muestran sus métricas en la siguiente tabla:
+
+\begin{table}[htb]
+	\begin{center}
+		\begin{tabular}{|l|l|l|l|l|}
+			\hline
+			& \textit{Accuracy} & \textit{Precision} & \textit{Recall} & \textit{F1} \\
+			\hline 
+			\textit{Xgboost} & 0.7324 & 0.6364 & 0.3182 &  0.4242 \\ \hline
+			\textit{naive Bayes} & 0.6056 & 0.4167 & 0.6818 & 0.5172 \\ \hline
+			
+		\end{tabular}
+		\caption{Tabla de métricas de ambos algoritmos.}
+		\label{tabla:results}
+	\end{center}
+\end{table}
+
+Se observa como el algoritmo propuesto alcanza buenos resultado en \textit{accuracy} y \textit{precision}, mientras que, por otra parte, \textit{naive Bayes} consigue mejor puntuación en \textit{recall}, que son compensados en \textit{F1} ya que es una medida que se pondera también con \textit{precision}.
+
+Por último, se propone un nuevo algoritmo para intentar conseguir mejores resultados. Se trata de un modelo sencillo basado en la comparación de \textit{xgboost} y \textit{naive Bayes}.
+
+\subsection{Combinación de algoritmos}
+
+Este último algoritmo se basa en comparar las estimaciones de los evaluados anteriormente. Existen 3 casos posibles que se explican a continuación:
+\begin{enumerate}
+	\item \textit{Xgboost} y \textit{naive Bayes} predicen que la salida es '1'. Luego el algoritmo que se propone elegirá '1'.
+	\item \textit{Xgboost} y \textit{naive Bayes} ofrecen como salida un '0'. Luego la salida de este modelo será un 0.
+	\item \textit{Xgboost} y \textit{naive Bayes} ofrecen salidas distintas. En este caso, se comparán las probabilidades con las que predicen ese valor y se asigna, como salida de este método la más alta de ambas. Por ejemplo, \textit{xgboost} da como salida un '0' con una probabilidad de 0.687 y \textit{naive Bayes} ofrece un '1' con probabilidad 0.574. Como es mayor la probabilidad de \textit{xgboost}, este modelo pondrá un '0'.
+\end{enumerate}
+
+En la siguiente tabla se pueden comparar los resultados de los tres modelos, \textit{xgboost}, \textit{naive Bayes} y el último basado en la combinación de ambos.
+
+\begin{table}[htb]
+	\begin{center}
+		\begin{tabular}{|l|l|l|l|l|}
+			\hline
+			& \textit{Accuracy} & \textit{Precision} & \textit{Recall} & \textit{F1} \\
+			\hline 
+			\textit{Xgboost} & 0.7324 & 0.6364 & 0.3182 &  0.4242 \\ \hline
+			\textit{naive Bayes} & 0.6056 & 0.4167 & 0.6818 & 0.5172 \\ \hline
+			\textit{Combine model} & 0.6479 & 0.4571 & 0.7273 & 0.5614 \\ \hline
+		\end{tabular}
+		\caption{Tabla de métricas de ambos algoritmos.}
+		\label{tabla:results_combine}
+	\end{center}
+\end{table}
+
+Como se puede apreciar en la tabla \ref{tabla:results_combine}, en términoos de \textit{accuracy} y \textit{precision} el resultado es un paso intermedio entre \textit{xgbost} que es el modelo que mejores resultados ofrece y \textit{naive Bayes}. Por el contrario el algoritmo propuesto mejora notablemente las prestaciones en \textit{recall} y en \textit{F1 score}. 
